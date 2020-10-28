@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="amp.demo.mapper.ScheduleJobMapper">
+    <resultMap id="BaseResultMap" type="amp.demo.entity.ScheduleJob">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="job_name" property="jobName" jdbcType="VARCHAR"/>
+        <result column="cron_expression" property="cronExpression" jdbcType="VARCHAR"/>
+        <result column="bean_name" property="beanName" jdbcType="VARCHAR"/>
+        <result column="method_name" property="methodName" jdbcType="VARCHAR"/>
+        <result column="job_status" property="jobStatus" jdbcType="INTEGER"/>
+        <result column="job_describe" property="jobDescribe" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="base_column_list">
+        id,job_name,cron_expression,bean_name,method_name,job_status,job_describe
+    </sql>
+    <insert id="save" parameterType="amp.demo.entity.ScheduleJob">
+        insert into schedule_job(job_name,cron_expression,bean_name,method_name,job_status,job_describe)
+        values(#{jobName,jdbcType=VARCHAR},#{cronExpression,jdbcType=VARCHAR},#{beanName,jdbcType=VARCHAR},
+        #{methodName,jdbcType=VARCHAR},#{jobStatus,jdbcType=INTEGER},#{jobDescribe,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="updateById" parameterType="amp.demo.entity.ScheduleJob">
+        update schedule_job
+        <trim prefix="set" suffixOverrides=",">
+            <if test="jobName != null">
+                job_name=#{jobName,jdbcType=VARCHAR},
+            </if>
+            <if test="cronExpression != null">
+                cron_expression=#{cronExpression,jdbcType=VARCHAR},
+            </if>
+            <if test="beanName != null">
+                bean_name=#{beanName,jdbcType=VARCHAR},
+            </if>
+            <if test="methodName != null">
+                method_name=#{methodName,jdbcType=VARCHAR},
+            </if>
+            <if test="jobStatus != null">
+                job_status=#{jobStatus,jdbcType=INTEGER},
+            </if>
+            <if test="jobDescribe != null">
+                job_describe=#{jobDescribe,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        where id=#{id,jdbcType=INTEGER}
+    </update>
+
+    <delete id="removeById" parameterType="java.lang.Integer">
+        delete from schedule_job where id=#{id,jdbcType=INTEGER}
+    </delete>
+
+    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="base_column_list" />
+        from schedule_job where id=#{id,jdbcType=INTEGER}
+    </select>
+
+    <!--查询启动的定时任务-->
+    <select id="selectStart" resultMap="BaseResultMap">
+        select
+        <include refid="base_column_list"/>
+        from schedule_job where job_status=1
+    </select>
+    <!--查询所有的定时任务-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="base_column_list"/>
+        from schedule_job
+    </select>
+</mapper>

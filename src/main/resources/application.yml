@@ -1,0 +1,24 @@
+#端口号
+server:
+  port: 8082
+secretkey: 123456
+#### 数据库连接池属性
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/user?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+
+#当mybatis的xml文件和mapper接口不在相同包下时，需要用mapperLocations属性指定xml文件的路径
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: amp.demo.mapper.*
+#打印sql
+logging:
+  level:
+    amp.demo.mapper.ScheduleJobMapper : debug
+
+
+
