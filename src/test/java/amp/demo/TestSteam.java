@@ -6,16 +6,23 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
 
 public class TestSteam {
 
+    private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Map<Object,Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
+
     public static void main(String[] args) {
-
         List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
-
         List<Integer> s = list.stream()
                 .map(t -> t * t)
 //                .filter(t->t>=16)
@@ -25,15 +32,18 @@ public class TestSteam {
         //*
         List<User> listTow = new ArrayList<>();
         listTow.add(User.builder()
-                .bankUserName("甲4").password("4").flag(4).build());
-        listTow.add(User.builder()
                 .bankUserName("甲1").password("1").flag(1).build());
         listTow.add(User.builder()
                 .bankUserName("甲2").password("2").flag(2).build());
         listTow.add(User.builder()
                 .bankUserName("甲3").password("3").flag(3).build());
         listTow.add(User.builder()
+                .bankUserName("甲5").password("3").flag(3).build());
+        listTow.add(User.builder()
                 .bankUserName("甲3").password("3").flag(4).build());
+        listTow.add(User.builder()
+                .bankUserName("甲4").password("4").flag(4).build());
+
 //        List<String> collect = listTow.stream().map(User::getBankUserName).sorted().collect(Collectors.toList());
 //        System.out.println(collect);
 
@@ -43,10 +53,7 @@ public class TestSteam {
         Date currentTime = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(currentTime);
-
         System.out.println(dateString);
-
-
 
 //
 //        Optional<Integer> reduce1 = listTow.stream().map(User::getFlag).reduce(Integer::sum);
@@ -55,8 +62,20 @@ public class TestSteam {
 //        int sum = listTow.stream().mapToInt(User::getFlag).sum();
 //        System.out.println(sum);
 //
-//        OptionalInt max = listTow.stream().mapToInt(User::getFlag).max();
-//        System.out.println(max.getAsInt());
+        System.out.println("---------------------------------------------");
+       //按照对象的属性，对对象列表进行去重
+        listTow.stream().forEach(System.out::println);
+        System.out.println("---------------------------------------------");
+        List<User> collect = listTow.stream().filter(distinctByKey(User::getFlag)).collect(toList());
+        collect.stream().forEach(System.out::println);
+        System.out.println("---------------------------------------------");
+
+        List<String> listTows = new ArrayList<>();
+        listTow.stream().findFirst().ifPresent(t->listTows.add(t.getBankUserName()));
+        listTows.stream().forEach(System.out::println);
+
+        OptionalInt max = listTow.stream().mapToInt(User::getFlag).max();
+        System.out.println("max:"+ max.getAsInt());
 //        int i = max.orElse(3);
 //        System.out.println(i);
 //        List<User> collect1 = listTow.stream().filter(t -> t.getFlag()>2).skip(1).collect(Collectors.toList());
