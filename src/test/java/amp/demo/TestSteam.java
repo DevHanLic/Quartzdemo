@@ -2,15 +2,11 @@ package amp.demo;
 
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
 
@@ -23,6 +19,23 @@ public class TestSteam {
 
     public static void main(String[] args) {
         List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
+        List<Integer> listT = Arrays.asList(1, 2, 3);
+
+        List<Integer> collect1 = list.stream().filter(item -> !listT.contains(item)).collect(toList());
+
+        System.out.println(collect1);
+
+        // 并集
+        List<Integer> listAll = list.parallelStream().collect(Collectors.toList());
+        List<Integer> listAll2 = listT.parallelStream().collect(Collectors.toList());
+        listAll.addAll(listAll2);
+        System.out.println("---得到并集 listAll---");
+        listAll.stream().forEach(System.out :: println);
+
+        List<Integer> collect2 = listAll.stream().distinct().collect(toList());
+        System.out.println("---去重得到并集 listAll---");
+        collect2.stream().forEach(System.out :: println);
+
         List<Integer> s = list.stream()
                 .map(t -> t * t)
 //                .filter(t->t>=16)
