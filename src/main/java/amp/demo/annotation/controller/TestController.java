@@ -22,7 +22,7 @@ public class TestController {
     }
 
     @PostMapping("/api/test1")
-    public Object test1(@Validated @RequestBody UserTest userTest) {
+    public Object test1(@RequestBody  @Validated UserTest userTest) {
         return "hello world1";
     }
 

@@ -1,6 +1,5 @@
 package amp.demo;
 
-
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -57,6 +56,33 @@ public class TestSteam {
         listTow.add(User.builder()
                 .bankUserName("甲4").password("4").flag(4).build());
 
+        System.out.println("-----------------------------------------");
+
+        List<User> listTow1 = new ArrayList<>();
+        listTow1.add(User.builder()
+                .bankUserName("甲1").password("1").flag(1).build());
+        listTow1.add(User.builder()
+                .bankUserName("甲2").password("2").flag(2).build());
+        listTow1.add(User.builder()
+                .bankUserName("甲3").password("3").flag(3).build());
+        List<User> listTow2 = new ArrayList<>();
+        listTow2.add(User.builder()
+                .bankUserName("甲1").password("1").flag(1).build());
+        listTow2.add(User.builder()
+                .bankUserName("甲2").password("2").flag(2).build());
+        listTow2.add(User.builder()
+                .bankUserName("甲3").password("3").flag(3).build());
+        listTow2.add(User.builder()
+                .bankUserName("甲4").password("4").flag(4).build());
+        listTow2.add(User.builder()
+                .bankUserName("甲5").password("5").flag(5).build());
+
+        List<User> collect5 = listTow1.stream().filter(item -> !listTow2.contains(item)).collect(toList());
+
+        System.out.println("collect5------------"+collect5);
+
+
+        System.out.println("---------------------------------");
 //        List<String> collect = listTow.stream().map(User::getBankUserName).sorted().collect(Collectors.toList());
 //        System.out.println(collect);
 
