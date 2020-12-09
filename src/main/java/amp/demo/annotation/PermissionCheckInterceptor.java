@@ -1,6 +1,5 @@
 package amp.demo.annotation;
 
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 

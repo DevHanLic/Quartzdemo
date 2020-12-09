@@ -31,8 +31,8 @@ public class EncryptFieldAop {
     public void annotationPointCut() {
     }
 
-    @Around("annotationPointCut()")
-    public Object around(ProceedingJoinPoint joinPoint) {
+    @Around("@annotation(encryptMethod)")
+    public Object around(ProceedingJoinPoint joinPoint,EncryptMethod encryptMethod) {
         System.out.println("around");
         Object responseObj = null;
         try {

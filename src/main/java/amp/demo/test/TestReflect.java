@@ -1,8 +1,7 @@
-package amp.demo;
+package amp.demo.test;
 
 import amp.demo.entity.UserTest;
 import amp.demo.mapper.UserTestMapper;
-import amp.demo.utils.DateTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.*;
@@ -79,15 +78,15 @@ public class TestReflect {
             userTest.setTxAmt(new BigDecimal(String.valueOf(Float.parseFloat(split[1].trim())
                     + (Float.parseFloat(split[2].trim()) - Float.parseFloat(split[3].trim()))
                     + a)));
-            userTest.setTmSmp(DateTimeUtils.getCurrentDateTimeStr());
+
         } catch (Exception e) {
             throw new Exception("Set Object Null Failed!!");
         }
         Field[] fields = userTest.getClass().getDeclaredFields();
         for (int i = 0; i < fields.length; i++) {
             Field f = fields[i];
-            System.out.println(f.getType().toString());
-            System.out.println(f.getGenericType().toString());
+//            System.out.println(f.getType().toString());
+//            System.out.println(f.getGenericType().toString());
             if ("class java.lang.String".equals(f.getGenericType().toString())) {
                 f.setAccessible(true);
                 String val = (String) f.get(userTest);
@@ -143,65 +142,7 @@ public class TestReflect {
         return fileList;
     }
 
-    private void test(){
-        float SUM_FEE_AMT = 0f;
-        for (int i = 1; i < 5; i++) {
-            SUM_FEE_AMT = Float.sum(SUM_FEE_AMT ,i) ;
-        }
-        System.out.println(new BigDecimal(SUM_FEE_AMT));
-    }
-    /**
-     * 功能：产生1-1000中的900个不重复的随机数
-     *
-     * min:产生随机数的其实位置
-     * mab：产生随机数的最大位置
-     * n: 所要产生多少个随机数
-     *
-     */
-    public static int[] randomNumber(int min,int max,int n){
-
-        //判断是否已经达到索要输出随机数的个数
-        if(n>(max-min+1) || max <min){
-            return null;
-        }
-
-        int[] result = new int[n]; //用于存放结果的数组
-
-        int count = 0 ;
-        while(count <n){
-            int num = (int)(Math.random()*(max-min))+min;
-            boolean flag = true;
-            for(int j=0;j<n;j++){
-                if(num == result[j]){
-                    flag = false;
-                    break;
-                }
-            }
-            if(flag){
-                result[count] = num;
-                count++;
-            }
-        }
-        return result;
-    }
-    private static void test2(){
-        String str = "D0000000000049185500    00049993    698780 1220101231 6228483038323378775 000000500000 000000000000  00000000000 0200 000000 4814 01080209 918551048140002 395024934198 00 000000 01030000    000000 00 011 000000000007 000000000000 D00000000002 1 000 0 0 0000000000 01030000    0 07 09  00000000000  03000111001   49185500    01030000        1220 32 中国移动                                 156  00000000 D00000015              00000000              00000000              00000000              00000000              00000000              00000000              00000000              00000000              00000000              00000000  00000000  00000000  00000000                        00852020040412582383070054911253         0001                                                                                                                                                                                                                                        ";
-        String str1 ="B201707270015;;CNY2.00;0110;00;C1010611003601;C1010611003601;";
-        String[] split = str1.split(";");
-        UserTest u =new UserTest();
-        u.setName(split[1].trim());
-        System.out.println(u);
-        BigDecimal demo1 = new BigDecimal(111).add(new BigDecimal("222")).divide(new BigDecimal(100)).setScale(2);
-        BigDecimal demo2 = new BigDecimal(111).add(new BigDecimal("222")).divide(new BigDecimal(100),2);
-        System.out.println(demo1 +"-----------"+demo2);
-//        System.out.println(StrUtils.isBlank(str.substring(10,55))?" ":str.substring(10,55).trim());
-    }
     public static void main(String[] args) throws Exception {
-//        int[] result = TestReflect.randomNumber(99999,999999, 24000);
-//        for(int k =0 ;k<result.length;k++){
-//            System.out.println(result[k]);
-//        }
-        TestReflect.test2();
 //        //1
 //        Class<?> aClass = Class.forName("amp.demo.aop.TestRequest");
 //        System.out.println(aClass);
@@ -228,7 +169,7 @@ public class TestReflect {
 //        Object invoke = toString.invoke(testRequest);
 //        System.out.println(invoke);
 
-//        TestReflect testReflect = new TestReflect();
-//        testReflect.test();
+        TestReflect testReflect = new TestReflect();
+        testReflect.fileImportIntoDataBaseBO();
     }
 }

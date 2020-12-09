@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="amp.demo.mapper.UserTestMapper">
+    <resultMap id="BaseResultMap" type="amp.demo.entity.UserTest">
+        <id column="userNo" property="userNo" jdbcType="VARCHAR"/>
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="txAmt" property="txAmt" jdbcType="DECIMAL"/>
+        <result column="TM_SMP" property="tmSmp" jdbcType="DECIMAL"/>
+    </resultMap>
+    <sql id="base_column_list">
+        userNo,id,sex,name,txAmt
+    </sql>
+
+    <insert id="insertCheckCupData" parameterType="java.util.List" useGeneratedKeys="false">
+        insert into user_test (
+        userNo,id,sex,name,txAmt,TM_SMP)
+
+        <foreach collection="list" item="item" index="index" separator="union all" >
+            select #{item.userNo,jdbcType=VARCHAR},
+            #{item.id,jdbcType=VARCHAR},
+            #{item.sex,jdbcType=VARCHAR},
+            #{item.name,jdbcType=VARCHAR},
+            #{item.txAmt,jdbcType=DECIMAL},
+            date_format(now(),'%Y%m%d%H%i%s')
+            from dual
+        </foreach>
+    </insert>
+
+</mapper>

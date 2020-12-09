@@ -5,6 +5,7 @@ import amp.demo.annotation.isNotNull;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import java.math.BigDecimal;
 
 /**
  * @author han_lic
@@ -20,11 +21,15 @@ public class UserTest {
     /**
      * 性别 man or women
      * */
-    @Check(paramValues = {"man", "woman"})
+//    @Check(paramValues = {"man", "woman"})
     private String sex;
 
-    @isNotNull(message = "id 不能为空")
+//    @isNotNull(message = "id 不能为空")
     private String id;
 
+    private Long userNo;
 
+    private BigDecimal txAmt;
+
+    private String tmSmp;
 }

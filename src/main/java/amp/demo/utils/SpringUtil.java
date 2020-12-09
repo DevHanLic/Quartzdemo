@@ -5,13 +5,17 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author HLC
+ */
 @Component
 public class SpringUtil implements BeanFactoryPostProcessor {
 
     private static ConfigurableListableBeanFactory beanFactory;
 
+    @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        this.beanFactory = beanFactory;
+        SpringUtil.beanFactory = beanFactory;
     }
 
     public static Object getBean(String name) {
