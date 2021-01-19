@@ -1,13 +1,20 @@
 package amp.demo.controller;
 
+import amp.demo.BO.SftpConfigBO;
+import amp.demo.config.QuartzConfig;
+import amp.demo.config.SftpConstants;
 import amp.demo.entity.ScheduleJob;
 import amp.demo.annotation.MyBody;
 import amp.demo.entity.UserTest;
 import amp.demo.mapper.UserTestMapper;
+import amp.demo.service.SftpService;
+import amp.demo.service.UserTestService;
 import amp.demo.test.CommonUtils;
 import amp.demo.test.TestReflect;
 import amp.demo.utils.DateTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +23,7 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,8 +32,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1")
 public class ClientInfoController {
+
     @Autowired
     UserTestMapper userTestMapper;
+    @Autowired
+    UserTestService userTestService;
+    @Autowired
+    SftpService sftpService;
 
     @PostMapping("/clientInfo/pageList")
     String pageList(String reqDTO) {
@@ -63,6 +76,7 @@ public class ClientInfoController {
         }
         return result;
     }
+
     @PostMapping("/WriteToFile")
     void WriteToFile() throws IOException {
         int[] ints = randomNumber(100000,999999, 24000);
@@ -90,112 +104,30 @@ public class ClientInfoController {
     }
 
     @PostMapping("/test")
-    void test() throws Exception {
-        /** 批量提交条数 */
-        int batchCount = 2;
-        String path = "C:\\Users\\HLC\\Desktop\\testTxt.txt";
-        List<String> fileList = readFile(path);
+    void test(){
+       userTestService.deal();
+    }
+
+
+    @PostMapping("/clientInfo/add")
+    int add(String reqDTO) {
         List<UserTest> checkCupDataBOList = new ArrayList<>();
-        for (int i = 0; i < fileList.size(); i++) {
-            if (fileList.get(i).length() > 0) {
-                UserTest userTest = new UserTest();
-                try {
-                    MessageParsing(userTest, fileList.get(i));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                checkCupDataBOList.add(userTest);
-                if(checkCupDataBOList.size() >= batchCount || i == fileList.size() - 1 ){
-                    System.out.println(checkCupDataBOList.size());
-                    System.out.println(checkCupDataBOList.toString());
-                    System.out.println(userTestMapper.insertCheckCupData(checkCupDataBOList) != 0 ? "入库成功" : "入库失败");
-                    checkCupDataBOList = new  ArrayList<>();
-                }
-            }
-        }
-
+        return 1;
     }
 
-    public void MessageParsing(UserTest userTest, String fieldNames) throws Exception {
-
-        try {
-            String[] split = fieldNames.split(";");
-            userTest.setId(split[0]);
-            userTest.setName(split[1]);
-            userTest.setUserNo("".equals(split[2]) ? null : Long.parseLong(split[2]));
-//                    userTest.setSex(split[2]);
-            float a = 0f;
-            a = userTest.getUserNo() == null ? a : Float.parseFloat(split[4].trim());
-            userTest.setTxAmt(new BigDecimal(Float.parseFloat(split[1].trim())
-                    + ("".equals(split[2]) ? 0f : Float.parseFloat(split[2].trim()) - Float.parseFloat(split[3].trim()))
-                    + a));
-            userTest.setTmSmp(DateTimeUtils.getCurrentDateTimeStr());
-        } catch (Exception e) {
-            throw new Exception("Set Object Null Failed!!");
-        }
-        Field[] fields = userTest.getClass().getDeclaredFields();
-        for (int i = 0; i < fields.length; i++) {
-            Field f = fields[i];
-//            System.out.println(f.getType().toString());
-//            System.out.println(f.getGenericType().toString());
-            if ("class java.lang.String".equals(f.getGenericType().toString())) {
-                f.setAccessible(true);
-                String val = (String) f.get(userTest);
-                if (CommonUtils.isNull(val)) {
-                    f.set(userTest, " ");
-                }
-            } else if ("class java.math.BigDecimal".equals(f.getGenericType().toString())) {
-                f.setAccessible(true);
-                if (CommonUtils.isNull(f.get(userTest))) {
-                    f.set(userTest, new BigDecimal(0));
-                }
-            } else if ("class java.lang.Long".equals(f.getGenericType().toString())) {
-                f.setAccessible(true);
-                if (CommonUtils.isNull(f.get(userTest))) {
-                    f.set(userTest, Long.parseLong("0"));
-                }
-            }
-        }
-    }
-
-    private List<String> readFile(String filePath) {
-        ArrayList<String> fileList = new ArrayList<>();
-        File file = new File(filePath);
-        FileReader fileReader = null;
-        BufferedReader br = null;
-        if (file.exists()) {
-            try {
-                fileReader = new FileReader(file);
-                br = new BufferedReader(fileReader);
-                String lineContent;
-//                if (!((br.readLine()).equals("1.0.0"))){
-//                    System.out.println("-读取对账文件失败");
-//                }
-                int line = 0;
-                while ((lineContent = br.readLine()) != null) {
-                    line++;
-                    if (line <= 2) {
-                        continue;
-                    }
-                    fileList.add(lineContent);
-                }
-                fileList.remove(fileList.size()-1);
-                System.out.println(fileList.toString());
-            } catch (FileNotFoundException e) {
-                System.out.println("------------------no this file---------------");
-                e.printStackTrace();
-            } catch (IOException e) {
-                System.out.println("----------------io exception-----------------");
-                e.printStackTrace();
-            } finally {
-                try {
-                    br.close();
-                    fileReader.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return fileList;
+    @PostMapping("/sftp/test")
+    void sftpTest() {
+        SftpConfigBO sftpConfigBO = new SftpConfigBO();
+        sftpConfigBO.setSystemType(SftpConstants.SYSTEM_TYPE_OF_APPLICATION);
+        sftpConfigBO.setSystemChannel(SftpConstants.SYSTEM_CHANNEL_OF_PWM);
+        sftpConfigBO.setDownloadFileName("pv-1.6.6.tar.gz");
+        sftpConfigBO.setLocalFileName("C:\\Users\\HLC\\Desktop\\test\\pv-1.6.6.tar.gz");
+        sftpConfigBO.setFileType(SftpConstants.FILE_TYPE_OF_DATA);
+        sftpConfigBO.setServerUrl("sftp://192.168.184.128:22");
+        sftpConfigBO.setObjectiveDirectory("/home/elk");
+        sftpConfigBO.setUserPassword("root");
+        sftpConfigBO.setUserName("root");
+//        sftpConfigBO.setServerDirectory(bankCheckFileBO.getCheckFileDate());
+        sftpService.download(sftpConfigBO);
     }
 }

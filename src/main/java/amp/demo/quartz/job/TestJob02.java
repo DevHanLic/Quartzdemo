@@ -1,12 +1,16 @@
 package amp.demo.quartz.job;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
+/**
+ * @author HLC
+ */
 @Component("testJob02")
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public class TestJob02 {
 
     public void execute() {

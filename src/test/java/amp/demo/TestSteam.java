@@ -1,15 +1,18 @@
 package amp.demo;
 
 import amp.demo.entity.UserTest;
+import amp.demo.utils.DateTimeUtils;
 import amp.demo.utils.JudgeUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
 
@@ -144,8 +147,6 @@ public class TestSteam {
         Map<String, User> collect4 = listTow.stream().collect(
                 groupingBy(t -> t.getBankUserName(),collectingAndThen(maxBy(Comparator.comparingInt(User::getFlag)), Optional::get)));
 
-
-
         System.out.println(collect3);
         System.out.println(collect3.get("甲4"));
 
@@ -187,6 +188,29 @@ public class TestSteam {
         calendar.add(Calendar.MONTH, -1);
         fileDate = sdf.format(calendar.getTime());
         System.out.println(fileDate);
+        String format = LocalDate.parse(fileDate, DateTimeUtils.DEFAULT_DATE_FORMATTER).minusMonths(1L).format(DateTimeUtils.DEFAULT_DATE_FORMATTER);
+        System.out.println(format);
+        boolean contains = list.contains(4);
 
+        System.out.println(contains);
+
+        boolean a = list.stream().filter(t -> t==4).findAny().isPresent();
+        boolean b = list.stream().anyMatch(t -> t==4);
+        System.out.println(a);
+        System.out.println(b);
+        boolean b1 = list.stream().allMatch(t -> t == 1);
+        System.out.println(b1);
+        //3.获取两个List<User>中得所有名字name集合
+        List<String> collect7 = Stream.of(listTow, listTow1).flatMap(r -> r.stream().map(User::getBankUserName)).distinct().collect(toList());
+        System.out.println(collect7);
+
+//        int b= 45;//制表符
+//        char cb =  (char)b;
+        String str = "-15.15-";
+        System.out.println(str.replaceAll(String.valueOf((char)45),""));
+
+        char character = 'a';
+        int ascii = (int) character;
+        System.out.println(ascii);
     }
 }
