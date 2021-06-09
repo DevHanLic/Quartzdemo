@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author han_lic
@@ -16,7 +17,9 @@ public class TestDemo {
 //        String[] s = str.split("\\|");
 //        System.out.println(s.length);
 //        System.out.println(s[1].substring(8, 25));
-
+        String names = "8G+256G";
+        List<String> nameList = Stream.of(names.split(",")).collect(Collectors.toList());
+        System.out.println(nameList.size());
         String str1 = "B202012220248|06000000001082671|CNY11.11||";
         char FILE_PARTING = '|';
         System.out.println(characterComparison(str1,FILE_PARTING));
@@ -25,7 +28,7 @@ public class TestDemo {
         for (String s1: ss) {
             System.out.println(s1);
         }
-// 定义俩个字符串
+        // 定义俩个字符串
         String shortStr = "CNY";
         String longStr = "00#CNY1.0000#1-01#CNY0.0200#1";
         // 调用searchCount方法
@@ -36,6 +39,12 @@ public class TestDemo {
         int[] arr = {1,2,3};
         List<Integer> list = Arrays.stream(arr).boxed().collect(Collectors.toList());
         System.out.println(list);
+
+        String str2 = "1|1^18817146643|";
+        String appUser = str2.split("\\|")[1].substring(2);
+        System.out.println(appUser);
+        String fileName = ".JPG";
+        System.out.println("------------"+fileName.equalsIgnoreCase(".jpg"));
     }
 
     // 定义searchCount方法，来返回字符串出现的个数

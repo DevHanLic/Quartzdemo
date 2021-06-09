@@ -23,14 +23,32 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
-
+        <dependency>
+            <groupId>com.hisun.hsm</groupId>
+            <artifactId>hiHsm</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hisun.hsm</groupId>
+            <artifactId>higzsign</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hisun.hsm</groupId>
+            <artifactId>hiHsmTest</artifactId>
+            <version>1.2</version>
+        </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.16</version>
         </dependency>
-
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+            <scope>compile</scope>
+        </dependency>
 <!--        <dependency>-->
 <!--            <groupId>mysql</groupId>-->
 <!--            <artifactId>mysql-connector-java</artifactId>-->
@@ -110,6 +128,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-quartz</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.7.0</version>
         </dependency>
     </dependencies>
 

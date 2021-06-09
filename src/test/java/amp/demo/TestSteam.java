@@ -1,6 +1,7 @@
 package amp.demo;
 
 import amp.demo.entity.UserTest;
+import amp.demo.utils.DateTimeUtil;
 import amp.demo.utils.DateTimeUtils;
 import amp.demo.utils.JudgeUtils;
 
@@ -47,11 +48,9 @@ public class TestSteam {
         List<Integer> listAll = list.parallelStream().collect(Collectors.toList());
         List<Integer> listAll2 = listT.parallelStream().collect(Collectors.toList());
         listAll.addAll(listAll2);
-        System.out.println("---得到并集 listAll---");
         listAll.stream().forEach(System.out :: println);
 
         List<Integer> collect2 = listAll.stream().distinct().collect(toList());
-        System.out.println("---去重得到并集 listAll---");
         collect2.stream().forEach(System.out :: println);
 
         List<Integer> s = list.stream()
@@ -212,5 +211,13 @@ public class TestSteam {
         char character = 'a';
         int ascii = (int) character;
         System.out.println(ascii);
+
+        List<Integer> listA = Arrays.asList(1,4, 5);
+        List<Integer> listB = Arrays.asList();
+        List<String> collect8 = Optional.of(listTow1)
+                .orElse(new ArrayList<>()).stream().map(User::getBankUserName).collect(toList());
+        System.out.println(collect8.toString());
+        List<Integer> integersq = Optional.of(listB).orElse(new ArrayList<>());
+        System.out.println(integersq.toString());
     }
 }

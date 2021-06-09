@@ -20,4 +20,8 @@ public class User  {
     private String password;
 
     private int flag;
+
+    private Long a;
+
+    private String b;
 }

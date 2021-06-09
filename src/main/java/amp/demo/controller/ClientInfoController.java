@@ -1,29 +1,21 @@
 package amp.demo.controller;
 
 import amp.demo.BO.SftpConfigBO;
-import amp.demo.config.QuartzConfig;
 import amp.demo.config.SftpConstants;
+import amp.demo.encryption.HSMClientUtils;
 import amp.demo.entity.ScheduleJob;
 import amp.demo.annotation.MyBody;
 import amp.demo.entity.UserTest;
 import amp.demo.mapper.UserTestMapper;
 import amp.demo.service.SftpService;
 import amp.demo.service.UserTestService;
-import amp.demo.test.CommonUtils;
-import amp.demo.test.TestReflect;
-import amp.demo.utils.DateTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.*;
-import java.lang.reflect.Field;
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -108,6 +100,13 @@ public class ClientInfoController {
        userTestService.deal();
     }
 
+    @PostMapping("/testEncryption")
+    void testEncryption(){
+        String str1 = "151110784x1";
+        String str2 = "15556566";
+        System.out.println("(纯数字)加密数据"+ HSMClientUtils.encrtyptASCII(str1));
+        System.out.println("(纯数字)jie密数据"+ HSMClientUtils.decryptASCII(str1));
+    }
 
     @PostMapping("/clientInfo/add")
     int add(String reqDTO) {
