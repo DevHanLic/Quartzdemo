@@ -1,22 +1,15 @@
 package amp.demo;
 
-import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 /**
- * @ProjectName: quickpayment
- * @Package: com.cmpay.quickpayment.controller
- * @ClassName: User
- * @Author: HLC
- * @Description: 测试类
- * @Date: 2020/8/27 16:13
+ * @author han_lic
+ * @date 2021/7/16 16:00
  */
 @Data
-@Builder
-public class User  {
-
+public class UserResp {
     private String bankUserName;
 
     private String password;

@@ -107,6 +107,8 @@ public class TestSteam {
         listTow.sort(Comparator.comparingInt(o -> Integer.parseInt(o.getPassword())));
         System.out.println( listTow.stream().collect(toList()));
 
+        List<Integer> collect9 = listTow.stream().map(User::getFlag).collect(toList());
+        System.out.println("collect9--------"+collect9.toString());
 
 
 //
@@ -219,5 +221,26 @@ public class TestSteam {
         System.out.println(collect8.toString());
         List<Integer> integersq = Optional.of(listB).orElse(new ArrayList<>());
         System.out.println(integersq.toString());
+
+        List<Integer> sss = Arrays.asList(1,4, 5);
+        listA.stream().forEach(t->{
+            if (t>3){
+                System.out.println("---"+t);
+                return;
+            }
+            System.out.println(t);
+        });
+
+        for (Integer s1:sss) {
+            if (s1>3){
+                System.out.println("---"+s1);
+                continue;
+            }
+            System.out.println(s1);
+        }
+        TestUser testUser =new TestUser();
+        testUser.setB("0");
+        System.out.println(Integer.parseInt(testUser.getB()));
     }
+
 }

@@ -10,7 +10,9 @@ import amp.demo.mapper.UserTestMapper;
 import amp.demo.service.SftpService;
 import amp.demo.service.UserTestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -128,5 +130,9 @@ public class ClientInfoController {
         sftpConfigBO.setUserName("root");
 //        sftpConfigBO.setServerDirectory(bankCheckFileBO.getCheckFileDate());
         sftpService.download(sftpConfigBO);
+    }
+    @PostMapping("/poTest")
+     void  poTest(@RequestBody @Validated UserTest userTest) {
+        System.out.println(userTest.toString());
     }
 }

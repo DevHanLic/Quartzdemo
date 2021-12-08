@@ -45,6 +45,9 @@ public class TestDemo {
         System.out.println(appUser);
         String fileName = ".JPG";
         System.out.println("------------"+fileName.equalsIgnoreCase(".jpg"));
+
+        String a = "2018-04-03 21:59:09|wx2b029c08a6232582|1900008721|203682850||4200000100201804031566594966|204811300000006414|oBmItsw-0H0Y7_N8BUYjImdbyhr4|NATIVE|SUCCESS|CFT|CNY|0.01|0.00|0|0|0.00|0.00|||测试body|bank_mch_name=大时代科技有限公司&bank_mch_id=990581053996001&|0.05|0.20%|0.01|0.00|";
+        System.out.println("1111"+characterComparison(a,FILE_PARTING));
     }
 
     // 定义searchCount方法，来返回字符串出现的个数
