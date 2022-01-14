@@ -1,6 +1,8 @@
 package amp.demo.service.impl;
 
+import amp.demo.ExceptionHandler.MsgEnum;
 import amp.demo.entity.UserTest;
+import amp.demo.exception.BusinessException;
 import amp.demo.mapper.UserTestMapper;
 import amp.demo.service.UserTestService;
 import amp.demo.test.CommonUtils;
@@ -62,7 +64,7 @@ public class UserTestServicelmpl implements UserTestService {
 
     @Override
     public void insetUserTest(List<UserTest> checkCupDataBOList) {
-        userTestMapper.insertCheckCupData(Optional.ofNullable(checkCupDataBOList).orElse(null));
+        userTestMapper.insertCheckCupData(Optional.ofNullable(checkCupDataBOList).orElseThrow(() -> new BusinessException(MsgEnum.SERIALNO_IS_NULL)));
     }
 
     @Override
