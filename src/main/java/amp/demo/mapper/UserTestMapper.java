@@ -16,5 +16,5 @@ public interface UserTestMapper {
 
     int insertCheckCupData(List<UserTest> checkCupDataBOList);
 
-
+    int updateData(List<UserTest> checkCupDataBOList);
 }

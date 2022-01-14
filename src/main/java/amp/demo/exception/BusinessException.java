@@ -56,6 +56,14 @@ public class BusinessException extends RuntimeException implements AlertCapable 
             }
         }
     }
+
+    /**
+     * @param alertCapable
+     */
+    public BusinessException(AlertCapable alertCapable) {
+        this(alertCapable.getMsgCd(), alertCapable.getMsgInfo());
+    }
+
     @Override
     public String getMsgCd() {
         return this.msgCd;

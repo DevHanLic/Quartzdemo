@@ -29,8 +29,50 @@
         </foreach>
     </insert>
 
-<!--    <select id="selectByTime" parameterType="amp.demo.entity.UserTest" resultMap="BaseResultMap">-->
+    <update id="updateData"  parameterType="java.util.List">
+        UPDATE user_test
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="name =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when userNo =  #{item.userNo,jdbcType=VARCHAR} and sex = #{item.sex, jdbcType=VARCHAR}
+                    then #{item.name, jdbcType=VARCHAR}
 
-<!--    </select>-->
+                </foreach>
+            </trim>
+            <trim prefix="txAmt =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when userNo =  #{item.userNo,jdbcType=VARCHAR} and sex = #{item.sex, jdbcType=VARCHAR}
+                    then #{item.txAmt, jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+        </trim>
+        WHERE
+        <foreach collection="list" separator="or" item="item" index="index">
+            userNo =  #{item.userNo,jdbcType=VARCHAR} and sex = #{item.sex, jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+<!--    <update id="updateData"  parameterType="java.util.List">-->
+<!--        UPDATE user_test-->
+<!--        <set>-->
+<!--            <trim prefix="txAmt=case" suffix="end,">-->
+<!--                <foreach collection="list" item="item" index="index">-->
+<!--                    when userNo = #{item.userNo,jdbcType=VARCHAR} and sex = #{item.sex, jdbcType=VARCHAR} then-->
+<!--                    <choose>-->
+<!--                        <when test="item.txAmt != null">-->
+<!--                            #{item.txAmt,jdbcType=VARCHAR}-->
+<!--                        </when>-->
+<!--                        <otherwise>-->
+<!--                            txAmt-->
+<!--                        </otherwise>-->
+<!--                    </choose>-->
+<!--                </foreach>-->
+<!--            </trim>-->
+<!--        </set>-->
+<!--        WHERE-->
+<!--        <foreach collection="list" separator="or" item="item" index="index">-->
+<!--            userNo =  #{item.userNo,jdbcType=VARCHAR} and sex = #{item.sex, jdbcType=VARCHAR}-->
+<!--        </foreach>-->
+<!--    </update>-->
 
 </mapper>

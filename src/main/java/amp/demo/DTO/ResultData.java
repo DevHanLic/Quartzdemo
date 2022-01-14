@@ -1,11 +1,16 @@
 package amp.demo.DTO;
 
+import amp.demo.entity.UserTest;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
+import java.util.List;
 
 /**
  * @author han_lic
  * @date 2021/5/7 20:22
  */
+@Data
 public class ResultData {
 
     @ApiModelProperty(value = "保单号")
@@ -28,4 +33,6 @@ public class ResultData {
 
     @ApiModelProperty(value = "订单号")
     private  String channelOrderNo;
+
+    List<UserTest> userTestList;
 }

@@ -16,6 +16,7 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author han_lic
@@ -23,6 +24,7 @@ import java.util.List;
  */
 @Service
 public class UserTestServicelmpl implements UserTestService {
+
     @Autowired
     UserTestMapper userTestMapper;
 
@@ -57,6 +59,17 @@ public class UserTestServicelmpl implements UserTestService {
             }
         }
     }
+
+    @Override
+    public void insetUserTest(List<UserTest> checkCupDataBOList) {
+        userTestMapper.insertCheckCupData(Optional.ofNullable(checkCupDataBOList).orElse(null));
+    }
+
+    @Override
+    public void updateUserTest(List<UserTest> checkCupDataBOList) {
+        userTestMapper.updateData(Optional.ofNullable(checkCupDataBOList).orElse(null));
+    }
+
     public void MessageParsing(UserTest userTest, String fieldNames) throws Exception {
 
         try {

@@ -1,8 +1,12 @@
 package amp.demo;
 
 import amp.demo.utils.JudgeUtils;
+import amp.demo.utils.StringTools;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
@@ -100,21 +104,70 @@ public class Test {
 
 
         String respContent = "{\n" +
-                "\t\"respCd\": \"0000\",\n" +
-                "\t\"respContent\": \"{\\\"transTp\\\":\\\"01\\\",\\\"discountAmt\\\":\\\"0\\\",\\\"orderId\\\":\\\"01240220211126174500690100000042\\\",\\\"appName\\\":\\\"1\\\",\\\"refundAt\\\":\\\"0\\\",\\\"traceNo\\\":\\\"353652\\\",\\\"accNo\\\":\\\"622638****0095\\\",\\\"settleAmt\\\":\\\"80000\\\",\\\"instalTransInfo\\\":\\\"{numberOfInstallments=06}\\\",\\\"settleDate\\\":\\\"20211126\\\",\\\"transSt\\\":\\\"00\\\",\\\"deviceInfo\\\":\\\"\\\",\\\"mchntOrderId\\\":\\\"2021112674320057008006\\\",\\\"subTransTp\\\":\\\"0124\\\",\\\"traceTime\\\":\\\"1126174500\\\",\\\"currency\\\":\\\"156\\\",\\\"bankNm\\\":\\\"HXBANK\\\",\\\"refundCnt\\\":\\\"0\\\",\\\"transAt\\\":\\\"80000\\\"}\",\n" +
-                "\t\"respMsg\": \"查询交易成功\",\n" +
-                "\t\"seqId\": \"0380775395992064\",\n" +
-                "\t\"sign\": \"DbyYFc+8vpeI5N+4ZG7zjQOoJmiYuVlt/1FOTAl9ZkJnWfTk/zj5wKKHbjTCjiMLIIPPvgcEcLJaOtQ7sWnRm6NA20eiI4epiNSljFCV11zNjpyx7m2md0wQmEGFBpBRs+INv3iL6E6WW5A74BSXvZPzbgBdvUkaDGzwtZw/FNyVgkCqkOqtZOtIoG02HrF+XyvpdhrHvIyYdRUDzV3AASr3B3GDeYayNpaOAxeTZhsfiiicZW1oR9pInaDuO5RER7DruvORjhht+DztclvU7Jhv6odlFWbqeN26o+y3Yv4+HyhJBVSNG+a+i9BFRW7nqH+lG9sAJvRwxDrrZ8Uu2Q==\",\n" +
-                "\t\"timestamp\": \"20211126204827\",\n" +
-                "\t\"version\": \"1.0.2\"\n" +
-                "}\n";
+                "    \"code\": \"0\",\n" +
+                "    \"msg\": \"通讯正常返回\",\n" +
+                "    \"body\": [\n" +
+                "        {\n" +
+                "            \"altid\": \"7050743\",\n" +
+                "            \"pripid\": \"430104000022018112000296\",\n" +
+                "            \"altitem\": \"71\",\n" +
+                "            \"Altitem_cn\": \"章程备案\",\n" +
+                "            \"altbe\": \"无\",\n" +
+                "            \"altaf\": \"2020-07-30新章程\",\n" +
+                "            \"altdate\": \"2020-07-30 15:28:56.0\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"altid\": \"7050742\",\n" +
+                "            \"pripid\": \"430104000022018112000296\",\n" +
+                "            \"altitem\": \"70\",\n" +
+                "            \"Altitem_cn\": \"高级管理人员备案（董事、监事、经理等）\",\n" +
+                "            \"altbe\": \"曾宪可\",\n" +
+                "            \"altaf\": \"杨小杰\",\n" +
+                "            \"altdate\": \"2020-07-30 15:28:56.0\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"altid\": \"7050741\",\n" +
+                "            \"pripid\": \"430104000022018112000296\",\n" +
+                "            \"altitem\": \"03\",\n" +
+                "            \"Altitem_cn\": \"法定代表人变更\",\n" +
+                "            \"altbe\": \"曾宪可\",\n" +
+                "            \"altaf\": \"杨小杰\",\n" +
+                "            \"altdate\": \"2020-07-30 15:28:56.0\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"altid\": \"7050740\",\n" +
+                "            \"pripid\": \"430104000022018112000296\",\n" +
+                "            \"altitem\": \"02\",\n" +
+                "            \"Altitem_cn\": \"地址变更\",\n" +
+                "            \"altbe\": \"湖南省长沙市岳麓区桔子洲街道潇湘中路298号曙光泊岸锦园1栋601房\",\n" +
+                "            \"altaf\": \"湖南省长沙市岳麓区桔子洲街道潇湘中路298号曙光泊岸锦园7栋702房\",\n" +
+                "            \"altdate\": \"2020-07-30 15:28:56.0\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"altid\": \"7050739\",\n" +
+                "            \"pripid\": \"430104000022018112000296\",\n" +
+                "            \"altitem\": \"70\",\n" +
+                "            \"Altitem_cn\": \"高级管理人员备案（董事、监事、经理等）\",\n" +
+                "            \"altbe\": \"曾宪可\",\n" +
+                "            \"altaf\": \"杨小杰\",\n" +
+                "            \"altdate\": \"2020-07-30 15:28:56.0\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"altid\": \"7050738\",\n" +
+                "            \"pripid\": \"430104000022018112000296\",\n" +
+                "            \"altitem\": \"78\",\n" +
+                "            \"Altitem_cn\": \"联络员备案\",\n" +
+                "            \"altbe\": \"曾宪可 *** 备案手机：***\",\n" +
+                "            \"altaf\": \"杨小杰 *** 备案手机：***\",\n" +
+                "            \"altdate\": \"2020-07-30 15:28:56.0\"\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}";
 
         Map jsonToMap = JSONObject.parseObject(respContent);
-        System.out.println("reqData=" + jsonToMap.toString());
-        System.out.println("instalTransInfo"+JSONObject.parseObject(jsonToMap.get("respContent").toString()).get("instalTransInfo").toString());
-
-
-
+        List<Object> list = JSONArray.parseArray(jsonToMap.get("body").toString(), Object.class);
+        System.out.println("list" + list.size());
+        list.stream().forEach(System.out::println);
 
 //        Map map = new HashMap();
 //        map.put("a", "a");
@@ -126,7 +179,80 @@ public class Test {
         BigDecimal constant = new BigDecimal(10000);
         Double s8 = 3214434000d;
         System.out.println(new BigDecimal(s8).divide(constant).setScale(2, RoundingMode.HALF_UP));
+        CheckParamsBO checkParamBO = new CheckParamsBO();
+        checkParamBO.setCoopBusinessType("EM");
+        CheckParamsBO checkParamBO1 = new CheckParamsBO();
+        checkParamBO1 = null;
+        if (JudgeUtils.isNotNull(checkParamBO1) || isCoopBusinessTypeWdc(checkParamBO)) {
+            System.out.println("get");
+        } else {
+            System.out.println("not");
+        }
+        String dateStr = "Thu Jul 30 15:28:56 CST 2020";
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+        Date date = sdf.parse(dateStr);
+        //xxxx-xx-xx
+        String formatStr = new SimpleDateFormat("yyyy-MM-dd").format(date);
+        System.out.println(formatStr);
+
+        //xxxx-xx-xx xx:x:xx
+        String formatStr2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+        System.out.println(formatStr2);
+
+        String responseBody = "{\"code\":\"0\",\"msg\":\"通讯正常返回\",\"body\":[]}";
+        responseBody = "{\"code\": \"0\", \"msg\": \"通讯正常返回\",\"body\": [{\"altid\": \"7050743\",\"pripid\": \"430104000022018112000296\",\"altitem\": \"71\",\"Altitem_cn\": \"章程备案\",\"altbe\": \"无\",\"altaf\": \"2020-07-30新章程\",\"altdate\": \"2020-07-30 15:28:56.0\"},{\"altid\": \"7050742\",\"pripid\": \"430104000022018112000296\",\"altitem\": \"70\",\"Altitem_cn\": \"高级管理人员备案（董事、监事、经理等）\",\"altbe\": \"曾宪可\",\"altaf\": \"杨小杰\",\"altdate\": \"2020-07-30 15:28:56.0\"} ]}";
+
+        JSONObject responseBodyObj = JSONObject.parseObject(responseBody);
+        String body = responseBodyObj.getString("body");
 
 
+        List<BProCompanyChangeInf> inventoryDTOs = JSON.parseArray(body, BProCompanyChangeInf.class);
+
+        System.out.println("inventoryDTOs" + inventoryDTOs);
+
+        String str1 = "B202012210016|2020122103000000000024261770100|CNY2.00|0120|00|Z2010743000012|C1010611003601|01|6252496555476677-陈定芳||120099|F000|2|00#CNY10000.1000#1-01#CNY0.0200#1|";
+        String[] s2 = str1.split("\\|", -1);
+        int startPos = 0;
+        BigDecimal sumFeeAmt = new BigDecimal(0);
+        BigDecimal feeAmt = new BigDecimal(0);
+        String costInf = s2[13].trim();
+        int bankCostNum = Integer.parseInt(s2[12]);
+        for (int i = 0; i < bankCostNum; i++) {
+            startPos = JudgeUtils.isBlank(costInf) ? 0 : StringUtils.indexOf(costInf, "CNY") + 3;
+            feeAmt = new BigDecimal(StringTools.subString(costInf, startPos, startPos + 5)).setScale(4);
+            costInf = StringTools.subString(costInf, startPos + 6, costInf.length());
+            sumFeeAmt = sumFeeAmt.add(feeAmt).setScale(4);
+        }
+        System.out.println("sumFeeAmt"+sumFeeAmt.toString());
+
+
+        BigDecimal feeAmts = new BigDecimal(0);
+        String txamt1 = "00#CNY10000.1000#1";
+        String[] str11 = txamt1.split("-");
+        for (int i = 0; i<str11.length; i++) {
+            feeAmt = new BigDecimal(str11[i].substring(6, str11[i].length()-2)).setScale(4);
+            feeAmts = feeAmts.add(feeAmt).setScale(4);
+            System.out.println(feeAmts.toString());
+        }
+
+
+        String string = "hello world";
+
+        byte[] bytes = string.getBytes();
+
+        String s21 = new String(bytes);
+        List<String> list1 = Arrays.asList(s21);
+        System.out.println(list1.size());
+        for (String qs : list1){
+            System.out.println(qs);
+        }
+    }
+    
+
+    private static boolean isCoopBusinessTypeWdc(CheckParamsBO checkParamBO) {
+        if (JudgeUtils.equalsAny(checkParamBO.getCoopBusinessType(), "03", "EM")) {
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 }
