@@ -205,27 +205,22 @@ public class Test {
         JSONObject responseBodyObj = JSONObject.parseObject(responseBody);
         String body = responseBodyObj.getString("body");
 
+        BigDecimal sumFeeAmt = new BigDecimal(0);
+        BigDecimal feeAmt = new BigDecimal(0);
+        String costInf = "00#CNY0.0087#1";
+        String[] costInfSplit = costInf.split("-");
+        int bankCostNum = Integer.parseInt("1");
+        for (int i = 0; i < bankCostNum; i++) {
+            feeAmt = new BigDecimal(costInfSplit[i].substring(6, costInfSplit[i].length()-3)).setScale(4);
+            sumFeeAmt = sumFeeAmt.add(feeAmt).setScale(4);
+        }
+        System.out.println(sumFeeAmt);
 
         List<BProCompanyChangeInf> inventoryDTOs = JSON.parseArray(body, BProCompanyChangeInf.class);
 
         System.out.println("inventoryDTOs" + inventoryDTOs);
 
         String str1 = "B202012210016|2020122103000000000024261770100|CNY2.00|0120|00|Z2010743000012|C1010611003601|01|6252496555476677-陈定芳||120099|F000|2|00#CNY10000.1000#1-01#CNY0.0200#1|";
-        String[] s2 = str1.split("\\|", -1);
-        int startPos = 0;
-        BigDecimal sumFeeAmt = new BigDecimal(0);
-        BigDecimal feeAmt = new BigDecimal(0);
-        String costInf = s2[13].trim();
-        int bankCostNum = Integer.parseInt(s2[12]);
-        for (int i = 0; i < bankCostNum; i++) {
-            startPos = JudgeUtils.isBlank(costInf) ? 0 : StringUtils.indexOf(costInf, "CNY") + 3;
-            feeAmt = new BigDecimal(StringTools.subString(costInf, startPos, startPos + 5)).setScale(4);
-            costInf = StringTools.subString(costInf, startPos + 6, costInf.length());
-            sumFeeAmt = sumFeeAmt.add(feeAmt).setScale(4);
-        }
-        System.out.println("sumFeeAmt"+sumFeeAmt.toString());
-
-
         BigDecimal feeAmts = new BigDecimal(0);
         String txamt1 = "00#CNY10000.1000#1";
         String[] str11 = txamt1.split("-");
@@ -247,7 +242,7 @@ public class Test {
             System.out.println(qs);
         }
     }
-    
+
 
     private static boolean isCoopBusinessTypeWdc(CheckParamsBO checkParamBO) {
         if (JudgeUtils.equalsAny(checkParamBO.getCoopBusinessType(), "03", "EM")) {

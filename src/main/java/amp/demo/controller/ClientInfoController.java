@@ -12,10 +12,7 @@ import amp.demo.service.SftpService;
 import amp.demo.service.UserTestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -142,5 +139,10 @@ public class ClientInfoController {
     @PostMapping("/poTest")
     void poTest(@RequestBody @Validated UserTest userTest) {
         System.out.println(userTest.toString());
+    }
+
+    @GetMapping("/getTest")
+    void getTest(@RequestParam("agrm") String agrm) {
+        System.out.println(agrm);
     }
 }
