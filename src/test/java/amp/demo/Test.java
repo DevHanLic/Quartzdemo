@@ -1,5 +1,6 @@
 package amp.demo;
 
+
 import amp.demo.utils.JudgeUtils;
 import amp.demo.utils.StringTools;
 import com.alibaba.fastjson.JSON;
@@ -241,8 +242,18 @@ public class Test {
         for (String qs : list1){
             System.out.println(qs);
         }
-    }
+        Integer integer =new Integer("123");
+        int aw = 123;
+        System.out.println(integer == aw);
 
+        String u = "0";
+        if (JudgeUtils.equals(u,"0")){
+            System.out.println("123");
+        }else{
+            System.out.println("456");
+        }
+    }
+    
 
     private static boolean isCoopBusinessTypeWdc(CheckParamsBO checkParamBO) {
         if (JudgeUtils.equalsAny(checkParamBO.getCoopBusinessType(), "03", "EM")) {
@@ -250,4 +261,5 @@ public class Test {
         }
         return Boolean.FALSE;
     }
+
 }

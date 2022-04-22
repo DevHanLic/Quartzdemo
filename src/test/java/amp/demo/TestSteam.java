@@ -241,6 +241,16 @@ public class TestSteam {
         TestUser testUser =new TestUser();
         testUser.setB("0");
         System.out.println(Integer.parseInt(testUser.getB()));
+
+        List<User> listTow3 = new ArrayList<>();
+        listTow3.add(User.builder()
+                .bankUserName("甲1").password("1").flag(1).build());
+        listTow3.add(User.builder()
+                .bankUserName("甲2").password("2").flag(2).build());
+
+        List<User> collect10 = listTow3.stream().filter(t -> JudgeUtils.equals("1", t.getPassword())).collect(toList());
+        System.out.println("collect10-------------");
+        collect10.stream().forEach(System.out::println);
     }
 
 }
