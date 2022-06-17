@@ -1,5 +1,6 @@
 package amp.demo;
 
+import amp.demo.aop.TestRequest;
 import amp.demo.entity.UserTest;
 import amp.demo.mapper.UserTestMapper;
 import amp.demo.utils.DateTimeUtil;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -204,14 +206,14 @@ public class TestReflect {
 //        }
         TestReflect.test2();
 //        //1
-//        Class<?> aClass = Class.forName("amp.demo.aop.TestRequest");
-//        System.out.println(aClass);
-//
-//        Object o = aClass.newInstance();
-//        System.out.println(o);
-//        Method toString = aClass.getMethod("toString");
-//
-//        toString.invoke(o);
+        Class<?> aClass = Class.forName("amp.demo.aop.TestRequest");
+        System.out.println(aClass);
+        aClass.getClass().getDeclaredField("name");
+        Object o = aClass.newInstance();
+        System.out.println(o);
+        Method toString = aClass.getMethod("toString");
+
+        toString.invoke(o);
 //
 //        //2
 //        Class<TestResponse> testRequestClass = TestResponse.class;
@@ -229,7 +231,10 @@ public class TestReflect {
 //        Object invoke = toString.invoke(testRequest);
 //        System.out.println(invoke);
 
-//        TestReflect testReflect = new TestReflect();
-//        testReflect.test();
+        TestRequest testRequest1=new TestRequest();
+        Class<? extends TestRequest> aClass1 = testRequest1.getClass();
+        TestRequest testRequest = aClass1.newInstance();
+        Field field = testRequest.getClass().getDeclaredField("name");
+
     }
 }

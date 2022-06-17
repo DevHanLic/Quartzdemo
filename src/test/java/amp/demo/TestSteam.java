@@ -4,7 +4,9 @@ import amp.demo.entity.UserTest;
 import amp.demo.utils.DateTimeUtil;
 import amp.demo.utils.DateTimeUtils;
 import amp.demo.utils.JudgeUtils;
+import org.apache.commons.codec.binary.Base64;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -16,30 +18,31 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 
 public class TestSteam {
 
     private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
-        Map<Object,Boolean> seen = new ConcurrentHashMap<>();
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
         return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
     public static void main(String[] args) throws ParseException {
         List<Integer> list = Arrays.asList(1, 2, 3);
-        List<Integer> listT = Arrays.asList(1,4, 5);
+        List<Integer> listT = Arrays.asList(1, 4, 5);
         List<Integer> collect6 = listT.stream().filter(s -> list.stream().noneMatch(m -> m.equals(s))).collect(toList());
 
         collect6.stream().forEach(System.out::println);
 
         System.out.println("''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''");
-        UserTest userTest=new UserTest();
-        list.stream().forEach(s->{
-             listT.stream().forEach(t->{
+        UserTest userTest = new UserTest();
+        list.stream().forEach(s -> {
+            listT.stream().forEach(t -> {
                 if (s.equals(t))
                     userTest.setId(String.valueOf(s));
             });
         });
-        System.out.println("'''userTest'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''"+userTest.toString());
+        System.out.println("'''userTest'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''" + userTest.toString());
         List<Integer> collect1 = list.stream().filter(item -> !listT.contains(item)).collect(toList());
 
         System.out.println(collect1);
@@ -48,10 +51,10 @@ public class TestSteam {
         List<Integer> listAll = list.parallelStream().collect(Collectors.toList());
         List<Integer> listAll2 = listT.parallelStream().collect(Collectors.toList());
         listAll.addAll(listAll2);
-        listAll.stream().forEach(System.out :: println);
+        listAll.stream().forEach(System.out::println);
 
         List<Integer> collect2 = listAll.stream().distinct().collect(toList());
-        collect2.stream().forEach(System.out :: println);
+        collect2.stream().forEach(System.out::println);
 
         List<Integer> s = list.stream()
                 .map(t -> t * t)
@@ -97,7 +100,7 @@ public class TestSteam {
         //listTow2 - listTow1  差集
         List<User> collect5 = listTow2.stream().filter(item -> !listTow1.contains(item)).collect(toList());
 
-        System.out.println("collect5------------"+collect5);
+        System.out.println("collect5------------" + collect5);
 
 
         System.out.println("---------------------------------");
@@ -105,10 +108,10 @@ public class TestSteam {
 //        System.out.println(collect);
 
         listTow.sort(Comparator.comparingInt(o -> Integer.parseInt(o.getPassword())));
-        System.out.println( listTow.stream().collect(toList()));
+        System.out.println(listTow.stream().collect(toList()));
 
         List<Integer> collect9 = listTow.stream().map(User::getFlag).collect(toList());
-        System.out.println("collect9--------"+collect9.toString());
+        System.out.println("collect9--------" + collect9.toString());
 
 
 //
@@ -119,7 +122,7 @@ public class TestSteam {
 //        System.out.println(sum);
 //
         System.out.println("---------------------------------------------");
-       //按照对象的属性，对对象列表进行去重
+        //按照对象的属性，对对象列表进行去重
         listTow.stream().forEach(System.out::println);
         System.out.println("---------------------------------------------");
         List<User> collect = listTow.stream().filter(distinctByKey(User::getFlag)).collect(toList());
@@ -127,14 +130,14 @@ public class TestSteam {
         System.out.println("---------------------------------------------");
 
         List<String> listTows = new ArrayList<>();
-        listTow.stream().findFirst().ifPresent(t->listTows.add(t.getBankUserName()));
+        listTow.stream().findFirst().ifPresent(t -> listTows.add(t.getBankUserName()));
         listTows.stream().forEach(System.out::println);
 
         OptionalInt max = listTow.stream().mapToInt(User::getFlag).max();
-        System.out.println("max:"+ max.getAsInt());
+        System.out.println("max:" + max.getAsInt());
 
         List<User> c = listTow.stream().filter(t -> JudgeUtils.equals(t.getBankUserName(), "甲3")).collect(toList());
-        System.out.println("sss"+c);
+        System.out.println("sss" + c);
 //        int i = max.orElse(3);
 //        System.out.println(i);
 //        List<User> collect1 = listTow.stream().filter(t -> t.getFlag()>2).skip(1).collect(Collectors.toList());
@@ -143,10 +146,10 @@ public class TestSteam {
 //        System.out.println(collect2);
 //
         Map<String, User> collect3 = listTow.stream().collect(
-                groupingBy(t -> t.getBankUserName(),collectingAndThen(minBy(Comparator.comparingInt(User::getFlag)), Optional::get)));
+                groupingBy(t -> t.getBankUserName(), collectingAndThen(minBy(Comparator.comparingInt(User::getFlag)), Optional::get)));
 
         Map<String, User> collect4 = listTow.stream().collect(
-                groupingBy(t -> t.getBankUserName(),collectingAndThen(maxBy(Comparator.comparingInt(User::getFlag)), Optional::get)));
+                groupingBy(t -> t.getBankUserName(), collectingAndThen(maxBy(Comparator.comparingInt(User::getFlag)), Optional::get)));
 
         System.out.println(collect3);
         System.out.println(collect3.get("甲4"));
@@ -184,7 +187,7 @@ public class TestSteam {
         String fileDate = "20190903";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime( sdf.parse(fileDate));
+        calendar.setTime(sdf.parse(fileDate));
         //计算前一个月的日期
         calendar.add(Calendar.MONTH, -1);
         fileDate = sdf.format(calendar.getTime());
@@ -195,8 +198,8 @@ public class TestSteam {
 
         System.out.println(contains);
 
-        boolean a = list.stream().filter(t -> t==4).findAny().isPresent();
-        boolean b = list.stream().anyMatch(t -> t==4);
+        boolean a = list.stream().filter(t -> t == 4).findAny().isPresent();
+        boolean b = list.stream().anyMatch(t -> t == 4);
         System.out.println(a);
         System.out.println(b);
         boolean b1 = list.stream().allMatch(t -> t == 1);
@@ -208,13 +211,13 @@ public class TestSteam {
 //        int b= 45;//制表符
 //        char cb =  (char)b;
         String str = "-15.15-";
-        System.out.println(str.replaceAll(String.valueOf((char)45),""));
+        System.out.println(str.replaceAll(String.valueOf((char) 45), ""));
 
         char character = 'a';
         int ascii = (int) character;
         System.out.println(ascii);
 
-        List<Integer> listA = Arrays.asList(1,4, 5);
+        List<Integer> listA = Arrays.asList(1, 4, 5);
         List<Integer> listB = Arrays.asList();
         List<String> collect8 = Optional.of(listTow1)
                 .orElse(new ArrayList<>()).stream().map(User::getBankUserName).collect(toList());
@@ -222,23 +225,23 @@ public class TestSteam {
         List<Integer> integersq = Optional.of(listB).orElse(new ArrayList<>());
         System.out.println(integersq.toString());
 
-        List<Integer> sss = Arrays.asList(1,4, 5);
-        listA.stream().forEach(t->{
-            if (t>3){
-                System.out.println("---"+t);
+        List<Integer> sss = Arrays.asList(1, 4, 5);
+        listA.stream().forEach(t -> {
+            if (t > 3) {
+                System.out.println("---" + t);
                 return;
             }
             System.out.println(t);
         });
 
-        for (Integer s1:sss) {
-            if (s1>3){
-                System.out.println("---"+s1);
+        for (Integer s1 : sss) {
+            if (s1 > 3) {
+                System.out.println("---" + s1);
                 continue;
             }
             System.out.println(s1);
         }
-        TestUser testUser =new TestUser();
+        TestUser testUser = new TestUser();
         testUser.setB("0");
         System.out.println(Integer.parseInt(testUser.getB()));
 
@@ -247,10 +250,26 @@ public class TestSteam {
                 .bankUserName("甲1").password("1").flag(1).build());
         listTow3.add(User.builder()
                 .bankUserName("甲2").password("2").flag(2).build());
-
-        List<User> collect10 = listTow3.stream().filter(t -> JudgeUtils.equals("1", t.getPassword())).collect(toList());
+        listTow3.add(User.builder()
+                .bankUserName("甲3").password("1").flag(3).build());
+        List<User> collect10 = listTow3.stream().filter(s1 -> JudgeUtils.equals(s1.getPassword(), "1")).collect(toList());
         System.out.println("collect10-------------");
         collect10.stream().forEach(System.out::println);
+
+        String brandSerFeeD ="30.5";
+        String brandSerFeeC ="0.2";
+        String brandSerFeet ="30.1";
+
+        String brandSerFee1 ="30.5";
+        String brandSerFee2 ="0.2";
+        String brandSerFee3 ="30.1";
+
+        testUser.setMerchantBonusAmount(new BigDecimal(String.valueOf(new BigDecimal(brandSerFeeD).subtract(new BigDecimal(brandSerFeeC).add(new BigDecimal(brandSerFeet)))))
+                .add(new BigDecimal(brandSerFee1)).subtract(new BigDecimal(brandSerFee2).add(new BigDecimal(brandSerFee3))));
+        System.out.println(testUser.getMerchantBonusAmount().toString());
+
+new String();
+        System.out.println(Base64.decodeBase64("qYgmqUr7Mlwj4ZP+HjjCxA=="));
     }
 
 }
