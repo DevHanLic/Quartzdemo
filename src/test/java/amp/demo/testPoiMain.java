@@ -17,7 +17,7 @@ import java.util.List;
 public class testPoiMain {
     public static void main(String[] args) throws Exception {
 
-        File file = new File("/Users/apple_hlc/Desktop/dev/dfpay/app/dfpay-app/src/main/java/com/cmpay/dfpay/controller");
+        File file = new File("/Users/apple_hlc/Desktop/dev/quickpayment/app/quickpayment-app/src/main/java/com/cmpay/quickpayment/controller");
         //获取当前目录下的所有文件名字
         List<String> list = getFile(file);
         List<String> strings = new ArrayList<>();

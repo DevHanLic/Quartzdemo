@@ -3,6 +3,7 @@ package amp.demo;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author han_lic
@@ -21,4 +22,7 @@ public class TestUser {
     private String mobileNo;
 
     private User user;
+
+
+    private List<User> userList;
 }

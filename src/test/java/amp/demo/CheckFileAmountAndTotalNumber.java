@@ -6,10 +6,7 @@ import amp.demo.utils.FileUtils;
 import amp.demo.utils.JudgeUtils;
 
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 /**
  * @author han_lic
@@ -19,9 +16,32 @@ public class CheckFileAmountAndTotalNumber {
 
     public static void main(String[] args) throws Exception {
 //        Message();
-        test1();
+        //test1();
+// /Users/apple_hlc/Desktop/bankFileZilla/20220719_01_AC_NCOMTRX_13
+        // test
+        File file = new File("/Users/apple_hlc/Desktop/bankFileZilla/20220719_01_AC_NCOMTRX_13");
+        int fileTotalLineNum = FileUtils.getFileTotalNum(file);
+        System.out.println("fileTotalLineNum" + fileTotalLineNum);
+        String fileCharset = FileUtils.getFileCharset(file);
+        String lineContent;
+        int line = 0;
+        InputStreamReader inputStreamReader = null;
+        BufferedReader br = null;
+        inputStreamReader = new InputStreamReader(new FileInputStream(file), fileCharset);
+        br = new BufferedReader(inputStreamReader);
+        while ((lineContent = br.readLine()) != null) {
+            line++;
+            if (line > 2) {
+                if (line == fileTotalLineNum - 1) {
+                    break;
+                }
+         /*       if (lineContent.startsWith("END")) {
+                    break;
+                }*/
+                System.out.println("lineContent" + lineContent);
+            }
+        }
     }
-
     public static void Message() throws Exception {
         File sourceFile = new File("C:\\Users\\HLC\\Desktop\\" + "TestCUP.txt");
         if (!sourceFile.exists()) {
@@ -71,26 +91,47 @@ public class CheckFileAmountAndTotalNumber {
     public static void test1() {
         int lineNo = 3 - 2 - 1;
         String number = "0";
-        System.out.println("lineNo"+lineNo);
-        System.out.println("number"+number);
+        System.out.println("lineNo" + lineNo);
+        System.out.println("number" + number);
         if ((long) lineNo != Long.parseLong(number)) {
             System.out.println(1);
         } else {
             System.out.println(2);
         }
-        
+
         String b = "18817146643";
-        TestUser user =new TestUser();
+        TestUser user = new TestUser();
         user.setA(Long.parseLong(b));
         user.setB(b);
         if (JudgeUtils.notEquals(user.getA(), user.getB())) {
-            System.out.println("-----"+1);
-        }else{
-            System.out.println("-----"+2);
+            System.out.println("-----" + 1);
+        } else {
+            System.out.println("-----" + 2);
         }
         String i = "1&2&3";
         String[] splitJournalInfo = i.split("\\&");
         System.out.println(splitJournalInfo[0]);
         System.out.println(splitJournalInfo[2]);
+    }
+
+    /**
+     * 获取文件总行数
+     *
+     * @param file 文件
+     * @return 总行数
+     * @throws Exception 异常信息
+     */
+    public static int getFileTotalNum(File file) throws Exception {
+        int fileTotalLine = 0;
+        try {
+            LineNumberReader lineNumberReader = new LineNumberReader(new FileReader(file));
+            lineNumberReader.skip(Long.MAX_VALUE);
+            // 读取的文件行数比实际少一
+            fileTotalLine = lineNumberReader.getLineNumber() + 1;
+            lineNumberReader.close();
+        } catch (IOException e) {
+            throw new Exception();
+        }
+        return fileTotalLine;
     }
 }
