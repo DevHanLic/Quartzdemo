@@ -465,12 +465,16 @@ public class TestSteam {
         Long aw= 0l;
         Integer as = aw.intValue();
         System.out.println("as"+as);
-        BigDecimal bigDecimal = new BigDecimal("73.00");
+        BigDecimal bigDecimal = new BigDecimal("0");
         String strs = "73.00";
         int i = strs.compareTo("73.00");
         System.out.println(i);
-        BigDecimal bigDecimal1 = new BigDecimal("0.02");
+        BigDecimal bigDecimal1 = new BigDecimal("0");
         System.out.println(bigDecimal1.compareTo(new BigDecimal(0.02)));
+
+
+        System.out.println(bigDecimal1.subtract(bigDecimal).toString());
+
 
         String u = "说三道四大大啊";
         String bankQuickPaymentAgreementCountLeft = StringUtils.left(u, 4);
@@ -485,6 +489,10 @@ public class TestSteam {
             textCont = URLDecoder.decode(y, "UTF-8");
         } catch (UnsupportedEncodingException e) {
         }
+        String time = DateTimeUtils.getCurrentTimeStr();
+        String times = DateTimeUtils.getCurrentDateStr() + (Integer.parseInt(time) + 300);
+        System.out.println("times" + times);
+
         System.out.println("y" +textCont);
     }
 
