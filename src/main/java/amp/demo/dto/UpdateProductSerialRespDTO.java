@@ -1,4 +1,4 @@
-package amp.demo.DTO;
+package amp.demo.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

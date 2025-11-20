@@ -1,21 +1,14 @@
 package amp.demo.test;
 
-import amp.demo.DTO.BrokenscreeniRespDTO;
-import amp.demo.annotation.MyBody;
-import amp.demo.entity.UserTest;
+import amp.demo.dto.BrokenscreeniRespDTO;
 import amp.demo.enums.ParamHelper;
 import amp.demo.utils.DateTimeUtil;
 import amp.demo.utils.JudgeUtils;
-import org.apache.logging.log4j.util.Strings;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author han_lic

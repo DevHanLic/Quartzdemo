@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
+    <!-- 关闭 Druid 连接池的日志 -->
+    <logger name="com.alibaba.druid.pool.DruidDataSource" level="OFF"/>
+    <logger name="com.alibaba.druid" level="ERROR"/>
+
+    <!-- 关闭 MySQL 连接相关日志 -->
+    <logger name="com.mysql.cj" level="ERROR"/>
+
     <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
             <pattern>

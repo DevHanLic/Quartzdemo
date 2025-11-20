@@ -1,4 +1,4 @@
-package amp.demo.DTO;
+package amp.demo.dto;
 
 import amp.demo.entity.UserTest;
 import io.swagger.annotations.ApiModelProperty;

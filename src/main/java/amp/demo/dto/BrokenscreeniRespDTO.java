@@ -1,4 +1,4 @@
-package amp.demo.DTO;
+package amp.demo.dto;
 
 import lombok.Data;
 

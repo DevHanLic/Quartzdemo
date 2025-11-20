@@ -1,7 +1,7 @@
 package amp.demo.controller;
 
 import amp.demo.BO.SftpConfigBO;
-import amp.demo.DTO.ResultData;
+import amp.demo.dto.ResultData;
 import amp.demo.config.SftpConstants;
 import amp.demo.encryption.HSMClientUtils;
 import amp.demo.entity.ScheduleJob;

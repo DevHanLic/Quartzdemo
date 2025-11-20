@@ -494,6 +494,16 @@ public class TestSteam {
         System.out.println("times" + times);
 
         System.out.println("y" +textCont);
+
+        List<Long> list1 = Arrays.asList(1L, 2L, 4L, 4L,null);
+        List<Long> list2 = Arrays.asList(3L, 4L, 5L, 5L,null);
+      // 取交集（去null、去重）
+        List<Long> intersection = list1.stream()
+                .filter(Objects::nonNull)          // 去除null
+                .filter(list2::contains)           // 取交集
+                .distinct()                        // 去重
+                .collect(Collectors.toList());
+        System.out.println(intersection);
     }
 
     public static boolean checkTimeRange(String startTime, String endTime, String format) {
