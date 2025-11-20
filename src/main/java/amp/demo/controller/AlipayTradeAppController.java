@@ -24,4 +24,16 @@ public class AlipayTradeAppController {
         return alipayAppPay;
     }
 
+    @PostMapping("/alipayApp/refund")
+    String refund() throws AlipayApiException {
+        String alipayAppPay = alipayAppTradeService.AlipayAppRefund();
+        return alipayAppPay;
+    }
+
+    @PostMapping("/alipayApp/close")
+    String close() throws AlipayApiException {
+        String alipayAppPay = alipayAppTradeService.AlipayAppClose();
+        return alipayAppPay;
+    }
+
 }

@@ -5,12 +5,13 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.AlipayConfig;
 import com.alipay.api.DefaultAlipayClient;
-import com.alipay.api.domain.AlipayTradeAppPayModel;
-import com.alipay.api.domain.ExtUserInfo;
-import com.alipay.api.domain.ExtendParams;
-import com.alipay.api.domain.GoodsDetail;
+import com.alipay.api.domain.*;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.request.AlipayTradeCloseRequest;
+import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
+import com.alipay.api.response.AlipayTradeCloseResponse;
+import com.alipay.api.response.AlipayTradeRefundResponse;
 import org.springframework.stereotype.Service;
 
 import java.net.URLDecoder;
@@ -35,68 +36,19 @@ public class AlipayAppTradeServiceImpl implements AlipayAppTradeService {
 
         // 设置商户订单号
         model.setOutTradeNo("70501111111S001111119");
-
         // 设置订单总金额
         model.setTotalAmount("9.00");
-
         // 设置订单标题
         model.setSubject("大乐透");
-
         // 设置产品码
         model.setProductCode("QUICK_MSECURITY_PAY");
-
-        // 设置订单包含的商品列表信息
-        List<GoodsDetail> goodsDetail = new ArrayList<GoodsDetail>();
-        GoodsDetail goodsDetail0 = new GoodsDetail();
-        goodsDetail0.setGoodsName("ipad");
-        goodsDetail0.setAlipayGoodsId("20010001");
-        goodsDetail0.setQuantity(1L);
-        goodsDetail0.setPrice("2000");
-        goodsDetail0.setGoodsId("apple-01");
-        goodsDetail0.setGoodsCategory("34543238");
-        goodsDetail0.setCategoriesTree("124868003|126232002|126252004");
-        goodsDetail0.setShowUrl("http://www.alipay.com/xxx.jpg");
-        goodsDetail.add(goodsDetail0);
-
-        model.setGoodsDetail(goodsDetail);
-
         // 设置订单绝对超时时间
         model.setTimeExpire("2016-12-31 10:05:00");
-
-        // 设置业务扩展参数
-        ExtendParams extendParams = new ExtendParams();
-        extendParams.setSysServiceProviderId("2088511833207846");
-        extendParams.setHbFqSellerPercent("100");
-        extendParams.setHbFqNum("3");
-        extendParams.setIndustryRefluxInfo("{\"scene_code\":\"metro_tradeorder\",\"channel\":\"xxxx\",\"scene_data\":{\"asset_name\":\"ALIPAY\"}}");
-        extendParams.setRoyaltyFreeze("true");
-        extendParams.setCardType("S0JP0000");
-        model.setExtendParams(extendParams);
-
-        // 设置公用回传参数
-        model.setPassbackParams("merchantBizType%3d3C%26merchantBizNo%3d2016010101111");
-
         // 设置商户的原始订单号
         model.setMerchantOrderNo("20161008001");
-
-        // 设置外部指定买家
-        ExtUserInfo extUserInfo = new ExtUserInfo();
-        extUserInfo.setCertType("IDENTITY_CARD");
-        extUserInfo.setCertNo("362334768769238881");
-        extUserInfo.setName("李明");
-        extUserInfo.setMobile("16587658765");
-        extUserInfo.setMinAge("18");
-        extUserInfo.setNeedCheckInfo("F");
-        extUserInfo.setIdentityHash("27bfcd1dee4f22c8fe8a2374af9b660419d1361b1c207e9b41a754a113f38fcc");
-        model.setExtUserInfo(extUserInfo);
-
-        // 设置通知参数选项
-        List<String> queryOptions = new ArrayList<String>();
-        queryOptions.add("hyb_amount");
-        queryOptions.add("enterprise_pay_info");
-        model.setQueryOptions(queryOptions);
-
         request.setBizModel(model);
+        request.setNotifyUrl("");
+        request.setReturnUrl("");
         AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
         String orderStr = response.getBody();
         System.out.println(orderStr);
@@ -110,9 +62,121 @@ public class AlipayAppTradeServiceImpl implements AlipayAppTradeService {
             // String diagnosisUrl = DiagnosisUtils.getDiagnosisUrl(response);
             // System.out.println(diagnosisUrl);
         }
-
-
         return convertToHtml;
+    }
+
+    @Override
+    public String AlipayAppRefund() throws AlipayApiException {
+        // 初始化SDK
+        AlipayClient alipayClient = new DefaultAlipayClient(getAlipayConfig());
+
+        // 构造请求参数以调用接口
+        AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+        AlipayTradeRefundModel model = new AlipayTradeRefundModel();
+
+        // 设置商户订单号
+        model.setOutTradeNo("20150320010101001");
+
+        // 设置支付宝交易号
+        model.setTradeNo("2014112611001004680073956707");
+
+        // 设置退款金额
+        model.setRefundAmount("200.12");
+
+        // 设置退款原因说明
+        model.setRefundReason("正常退款");
+
+        // 设置退款请求号
+        model.setOutRequestNo("HZ01RF001");
+
+        // 设置退款包含的商品列表信息
+        List<RefundGoodsDetail> refundGoodsDetail = new ArrayList<RefundGoodsDetail>();
+        RefundGoodsDetail refundGoodsDetail0 = new RefundGoodsDetail();
+        refundGoodsDetail0.setOutSkuId("outSku_01");
+        refundGoodsDetail0.setOutItemId("outItem_01");
+        refundGoodsDetail0.setGoodsId("apple-01");
+        refundGoodsDetail0.setRefundAmount("19.50");
+        List<String> outCertificateNoList = new ArrayList<String>();
+        outCertificateNoList.add("202407013232143241231243243423");
+        refundGoodsDetail0.setOutCertificateNoList(outCertificateNoList);
+        refundGoodsDetail.add(refundGoodsDetail0);
+        model.setRefundGoodsDetail(refundGoodsDetail);
+
+        // 设置退分账明细信息
+        List<OpenApiRoyaltyDetailInfoPojo> refundRoyaltyParameters = new ArrayList<OpenApiRoyaltyDetailInfoPojo>();
+        OpenApiRoyaltyDetailInfoPojo refundRoyaltyParameters0 = new OpenApiRoyaltyDetailInfoPojo();
+        refundRoyaltyParameters0.setAmount("0.1");
+        refundRoyaltyParameters0.setTransIn("2088101126708402");
+        refundRoyaltyParameters0.setRoyaltyType("transfer");
+        refundRoyaltyParameters0.setTransOut("2088101126765726");
+        refundRoyaltyParameters0.setTransOutType("userId");
+        refundRoyaltyParameters0.setRoyaltyScene("达人佣金");
+        refundRoyaltyParameters0.setTransInType("userId");
+        refundRoyaltyParameters0.setTransInName("张三");
+        refundRoyaltyParameters0.setDesc("分账给2088101126708402");
+        refundRoyaltyParameters.add(refundRoyaltyParameters0);
+        model.setRefundRoyaltyParameters(refundRoyaltyParameters);
+
+        // 设置查询选项
+        List<String> queryOptions = new ArrayList<String>();
+        queryOptions.add("refund_detail_item_list");
+        model.setQueryOptions(queryOptions);
+
+        // 设置针对账期交易
+        model.setRelatedSettleConfirmNo("2024041122001495000530302869");
+        request.setNotifyUrl("");
+        request.setBizModel(model);
+        // 第三方代调用模式下请设置app_auth_token
+        // request.putOtherTextParam("app_auth_token", "<-- 请填写应用授权令牌 -->");
+
+        AlipayTradeRefundResponse response = alipayClient.execute(request);
+        System.out.println(response.getBody());
+
+        if (response.isSuccess()) {
+            System.out.println("调用成功");
+        } else {
+            System.out.println("调用失败");
+            // sdk版本是"4.38.0.ALL"及以上,可以参考下面的示例获取诊断链接
+            // String diagnosisUrl = DiagnosisUtils.getDiagnosisUrl(response);
+            // System.out.println(diagnosisUrl);
+        }
+        return "0";
+    }
+
+    @Override
+    public String AlipayAppClose() throws AlipayApiException {
+        // 初始化SDK
+        AlipayClient alipayClient = new DefaultAlipayClient(getAlipayConfig());
+
+        // 构造请求参数以调用接口
+        AlipayTradeCloseRequest request = new AlipayTradeCloseRequest();
+        AlipayTradeCloseModel model = new AlipayTradeCloseModel();
+
+        // 设置该交易在支付宝系统中的交易流水号
+        model.setTradeNo("2013112611001004680073956707");
+
+        // 设置订单支付时传入的商户订单号
+        model.setOutTradeNo("HZ0120131127001");
+
+        // 设置商家操作员编号 id
+        model.setOperatorId("YX01");
+
+        request.setBizModel(model);
+        // 第三方代调用模式下请设置app_auth_token
+        // request.putOtherTextParam("app_auth_token", "<-- 请填写应用授权令牌 -->");
+
+        AlipayTradeCloseResponse response = alipayClient.execute(request);
+        System.out.println(response.getBody());
+
+        if (response.isSuccess()) {
+            System.out.println("调用成功");
+        } else {
+            System.out.println("调用失败");
+            // sdk版本是"4.38.0.ALL"及以上,可以参考下面的示例获取诊断链接
+            // String diagnosisUrl = DiagnosisUtils.getDiagnosisUrl(response);
+            // System.out.println(diagnosisUrl);
+        }
+        return "0";
     }
 
     private static AlipayConfig getAlipayConfig() {

@@ -4,7 +4,7 @@ import lombok.Data;
 
 /**
  * @author han_lic
- * @date 202511/21 10:16
+ * @date 2025/11/21 10:16
  * @desc app支付接口2.0 请求类
  */
 @Data
