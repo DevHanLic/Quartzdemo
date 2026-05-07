@@ -1,9 +1,8 @@
 package amp.demo.controller;
 
-import amp.demo.BO.SftpConfigBO;
+import amp.demo.bo.SftpConfigBO;
 import amp.demo.dto.ResultData;
 import amp.demo.config.SftpConstants;
-import amp.demo.encryption.HSMClientUtils;
 import amp.demo.entity.ScheduleJob;
 import amp.demo.annotation.MyBody;
 import amp.demo.entity.UserTest;
@@ -110,8 +109,10 @@ public class ClientInfoController {
     void testEncryption() {
         String str1 = "151110784x1";
         String str2 = "15556566";
-        System.out.println("(纯数字)加密数据" + HSMClientUtils.encrtyptASCII(str1));
-        System.out.println("(纯数字)jie密数据" + HSMClientUtils.decryptASCII(str1));
+        // HSM加密功能暂时不可用
+        // System.out.println("(纯数字)加密数据" + HSMClientUtils.encrtyptASCII(str1));
+        // System.out.println("(纯数字)jie密数据" + HSMClientUtils.decryptASCII(str1));
+        System.out.println("HSM加密功能暂时不可用");
     }
 
     @PostMapping("/clientInfo/add")

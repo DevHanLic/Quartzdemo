@@ -44,4 +44,11 @@ public interface ScheduleJobService {
 
     //展示定时任务列表
     public PageInfo<ScheduleJob> getJobAndTriggerDetails(int pageNum, int pageSize);
+
+    /**
+     * 更新任务状态
+     * @param id 任务ID
+     * @param status 任务状态 0-暂停 1-运行
+     */
+    void updateJobStatus(Integer id, Integer status);
 }

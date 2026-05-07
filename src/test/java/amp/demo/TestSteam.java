@@ -5,7 +5,7 @@ import amp.demo.utils.DateTimeUtil;
 import amp.demo.utils.DateTimeUtils;
 import amp.demo.utils.JudgeUtils;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;

@@ -4,7 +4,7 @@ import amp.demo.annotation.Check;
 import amp.demo.annotation.isNotNull;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 
 /**

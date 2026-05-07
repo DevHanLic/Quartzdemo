@@ -1,73 +1,69 @@
 package amp.demo.utils;
 
-
-import org.springframework.beans.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.beans.BeansException;
 
-import java.lang.reflect.Field;
-import java.util.*;
+import java.beans.PropertyDescriptor;
+import java.util.HashSet;
+import java.util.Set;
+import java.lang.reflect.Constructor;
 
-/**
- * @author HLC
- * @date: 2018/10/31 14:35
- * @description:
- */
 public class CopyUtils {
+    private static final Logger logger = LoggerFactory.getLogger(CopyUtils.class);
 
-    public static String[] getNullPropertyNames (Object source) {
+    public static String[] getNullPropertyNames(Object source) {
+        if (source == null) {
+            return new String[0];
+        }
+
         final BeanWrapper src = new BeanWrapperImpl(source);
-        java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
+        PropertyDescriptor[] pds = src.getPropertyDescriptors();
 
-        Set<String> emptyNames = new HashSet<String>();
-        for(java.beans.PropertyDescriptor pd : pds) {
+        Set<String> emptyNames = new HashSet<>();
+        for (PropertyDescriptor pd : pds) {
             Object srcValue = src.getPropertyValue(pd.getName());
             if (srcValue == null) {
                 emptyNames.add(pd.getName());
             }
         }
-        String[] result = new String[emptyNames.size()];
-        return emptyNames.toArray(result);
+        return emptyNames.toArray(new String[0]);
     }
-    /**
-     * 排除null值的拷贝
-     * @param src
-     * @param target
-     */
+
     public static void copyProperties(Object src, Object target) {
-        BeanUtils.copyProperties(src, target, getNullPropertyNames(src));
-    }
-    /**
-     * Apache
-     * @param src
-     * @param target
-     * @throws Exception
-     */
-    public static void copyPropertiesOfApache(Object src, Object target) {
+        if (src == null || target == null) {
+            logger.error("源对象或目标对象不能为空");
+            throw new IllegalArgumentException("源对象和目标对象不能为空");
+        }
+
         try {
-            BeanUtils.copyProperties(target, src);
-        } catch (Exception e) {
-            e.getMessage();
+            org.springframework.beans.BeanUtils.copyProperties(src, target, getNullPropertyNames(src));
+        } catch (BeansException e) {
+            logger.error("属性拷贝失败", e);
+            throw new RuntimeException("属性拷贝失败", e);
         }
     }
-    /**
-     * 转换成目标对象
-     * @param src
-     * @param tarClass
-     * @param <T>
-     * @return
-     */
-    public static <T> T convertObject(Object src, Class<T> tarClass){
-        if (null == src){
+
+    public static <T> T convertObject(Object src, Class<T> targetClass) {
+        if (src == null) {
             return null;
         }
-        T t=null;
-        try {
-            t = tarClass.newInstance();
-            copyProperties(src,t);
-        } catch (Exception e) {
-           e.getMessage();
+
+        if (targetClass == null) {
+            throw new IllegalArgumentException("目标类不能为空");
         }
-        return t;
+
+        try {
+            Constructor<T> constructor = targetClass.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            T target = constructor.newInstance();
+            copyProperties(src, target);
+            return target;
+        } catch (Exception e) {
+            logger.error("对象转换失败: source={}, target={}", src.getClass().getName(), targetClass.getName(), e);
+            throw new RuntimeException("对象转换失败", e);
+        }
     }
 }

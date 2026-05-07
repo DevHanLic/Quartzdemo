@@ -1,90 +1,84 @@
 package amp.demo.aop;
 
-import org.springframework.util.Base64Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Base64;
 
-
-/**
- * Ase加密
- *
- * @Author: zetting
- * @Date: 2018-05-23 22:13
- */
 public class AseUtil {
+    private static final Logger logger = LoggerFactory.getLogger(AseUtil.class);
 
     private static final String KEY_ALGORITHM = "AES";
-    private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";//默认的加密算法
+    private static final String DEFAULT_CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
+    private static final int KEY_SIZE = 128;
+    private static final int IV_LENGTH = 16;
 
-    /**
-     * AES 加密操作
-     *
-     * @param content  待加密内容
-     * @param password 加密密码
-     * @return 返回Base64转码后的加密数据
-     */
     public static String encrypt(String content, String password) {
-        try {
-            Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);// 创建密码器
-            byte[] byteContent = content.getBytes("utf-8");
-            cipher.init(Cipher.ENCRYPT_MODE, getSecretKey(password));// 初始化为加密模式的密码器
-            byte[] result = cipher.doFinal(byteContent);// 加密
-            return Base64Utils.encodeToString(result);
-        } catch (Exception ex) {
-            Logger.getLogger(AseUtil.class.getName()).log(Level.SEVERE, null, ex);
+        if (content == null || password == null) {
+            logger.error("加密失败：内容或密码不能为空");
+            return null;
         }
 
-        return null;
-    }
-
-    /**
-     * AES 解密操作
-     *
-     * @param content
-     * @param password
-     * @return
-     */
-    public static String decrypt(String content, String password) {
         try {
-            //实例化
+            byte[] iv = generateIv();
             Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
-            //使用密钥初始化，设置为解密模式
-            cipher.init(Cipher.DECRYPT_MODE, getSecretKey(password));
-            //执行操作
-            byte[] result = cipher.doFinal(Base64Utils.decodeFromString(content));
-            return new String(result, "utf-8");
-        } catch (Exception ex) {
-            Logger.getLogger(AseUtil.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            cipher.init(Cipher.ENCRYPT_MODE, getSecretKey(password), new IvParameterSpec(iv));
+            byte[] encrypted = cipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
 
-        return null;
+            byte[] combined = new byte[iv.length + encrypted.length];
+            System.arraycopy(iv, 0, combined, 0, iv.length);
+            System.arraycopy(encrypted, 0, combined, iv.length, encrypted.length);
+
+            return Base64.getEncoder().encodeToString(combined);
+        } catch (Exception ex) {
+            logger.error("AES加密失败", ex);
+            return null;
+        }
     }
 
-    /**
-     * 生成加密秘钥
-     *
-     * @return
-     */
-    private static SecretKeySpec getSecretKey(final String password) {
-        //返回生成指定算法密钥生成器的 KeyGenerator 对象
-        KeyGenerator kg = null;
-        try {
-            kg = KeyGenerator.getInstance(KEY_ALGORITHM);
-            //AES 要求密钥长度为 128
-            kg.init(128, new SecureRandom(password.getBytes()));
-            //生成一个密钥
-            SecretKey secretKey = kg.generateKey();
-            return new SecretKeySpec(secretKey.getEncoded(), KEY_ALGORITHM);// 转换为AES专用密钥
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(AseUtil.class.getName()).log(Level.SEVERE, null, ex);
+    public static String decrypt(String content, String password) {
+        if (content == null || password == null) {
+            logger.error("解密失败：内容或密码不能为空");
+            return null;
         }
-        return null;
+
+        try {
+            byte[] decoded = Base64.getDecoder().decode(content);
+            
+            byte[] iv = new byte[IV_LENGTH];
+            byte[] encrypted = new byte[decoded.length - IV_LENGTH];
+            System.arraycopy(decoded, 0, iv, 0, iv.length);
+            System.arraycopy(decoded, iv.length, encrypted, 0, encrypted.length);
+
+            Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
+            cipher.init(Cipher.DECRYPT_MODE, getSecretKey(password), new IvParameterSpec(iv));
+            byte[] decrypted = cipher.doFinal(encrypted);
+
+            return new String(decrypted, StandardCharsets.UTF_8);
+        } catch (Exception ex) {
+            logger.error("AES解密失败", ex);
+            return null;
+        }
+    }
+
+    private static SecretKeySpec getSecretKey(String password) throws NoSuchAlgorithmException {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance(KEY_ALGORITHM);
+        keyGenerator.init(KEY_SIZE, new SecureRandom(password.getBytes(StandardCharsets.UTF_8)));
+        SecretKey secretKey = keyGenerator.generateKey();
+        return new SecretKeySpec(secretKey.getEncoded(), KEY_ALGORITHM);
+    }
+
+    private static byte[] generateIv() {
+        byte[] iv = new byte[IV_LENGTH];
+        new SecureRandom().nextBytes(iv);
+        return iv;
     }
 }

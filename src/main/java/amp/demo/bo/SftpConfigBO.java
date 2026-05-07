@@ -1,4 +1,4 @@
-package amp.demo.BO;
+package amp.demo.bo;
 
 import lombok.Data;
 

@@ -1,17 +1,14 @@
 package amp.demo.annotation;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-/**
- * @author han_lic
- * @date 2020/11/12 14:34
- */
-
-public class PermissionCheckInterceptor extends HandlerInterceptorAdapter {
+@Component
+public class PermissionCheckInterceptor implements HandlerInterceptor {
     /**
      * 处理器处理之前调用
      */

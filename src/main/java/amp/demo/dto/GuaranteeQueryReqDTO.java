@@ -1,19 +1,15 @@
 package amp.demo.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-/**
- * @author han_lic
- * @date 2021/5/7 20:16
- */
 @Data
+@Schema(description = "保修查询请求DTO")
 public class GuaranteeQueryReqDTO {
 
-    @ApiModelProperty(value = "项目代码")
-    private  String projectCode;
+    @Schema(description = "项目代码")
+    private String projectCode;
 
-    @ApiModelProperty(value = "手机IMEI号")
-    private  String productSerialNo;
-
+    @Schema(description = "手机IMEI号")
+    private String productSerialNo;
 }

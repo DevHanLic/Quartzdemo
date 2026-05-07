@@ -1,21 +1,18 @@
 package amp.demo.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-/**
- * @author han_lic
- * @date 2021/5/8 8:43
- */
 @Data
+@Schema(description = "更新产品序列号响应DTO")
 public class UpdateProductSerialRespDTO {
 
-    @ApiModelProperty(value = "是否成功")
+    @Schema(description = "是否成功")
     private String isSuccess;
 
-    @ApiModelProperty(value = "错误码")
+    @Schema(description = "错误码")
     private String bizErrorCode;
 
-    @ApiModelProperty(value = "错误描述")
+    @Schema(description = "错误描述")
     private String bizErrorMsg;
 }

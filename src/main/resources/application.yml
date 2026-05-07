@@ -1,24 +1,148 @@
-#端口号
 server:
   port: 8082
-secretkey: 123456
-#### 数据库连接池属性
+
+secretkey: mySecretKeyForEncryption2024
+
+alipay:
+  public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuMQ3i0zun3eVNsAB429cuQLCkRgXuC31Qcke3gvn7tEcC+DJNmZLC6370Zc7x7YVMa2l/YcdBKPIWR9VK0fN1fzucLGDca8LO7WVUcoDymDzOHhpiGWQHqGndY0Iv0AkzI/UYNZ9XRKojCHPCPZxdBbLdAnYp/r7x3ImOahMYPUvpv8MUcrCvP0No2E6c3L32pd2n/5YjZP3BP96zVJ+sNMrPKstutAq+Y2Bs3/QWED8s8XZ70/hAU/Z+GuKSFqmHr99DT/lR3sgNzDbzrMJqbjixqW70TZtPdhWDCZJ36fckRCKu9kPRZ9PHi/kd6cWfq2y3XcHZ+GXDIwBzYwxCwIDAQAB
+  charset: UTF-8
+  sign-type: RSA2
+  app-id: 9021000157681961
+  private-key: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCJsOwAPZwn0/2hU+pcJO/OpXoBPEi8aFiX8ZHYK5v4BUnt/f4Y7iO14WAwxUbpv5ljJanBF+G6pXVuHvSmfKUPJal/coKMMFO21/leOZvL+y2NRl+mDiff8e1h3+KYU68KmrIczZoenz1gCDHOQ7P5b+J9+m/KdqcgbN5/VOwMe4PVIiUfmiCkKpyo9Q5Q+MyZ7oiR/1MYy/hlJV5vpgUSJT8BKmP02BroRcelQeSwnf4c/9h4XhX8wKnBbHUzW8u7L05KN1Iy5KPTpBU/VaH/Ia48ittGH4Lc+Vl+SQ9cTvm5mQePpYPypchQcLnDp3TKISjdDoIiX+iNpq2e5isDAgMBAAECggEAT6mR0U3T8+MdweIIHMmuCPQKU36qYn9IiphUFiqc8XE15cDm60uUU52ShoUM0x5sQ0W+Ih6MFe22tECqsUw6Pzo+B6ObzjoDpSztdMuFzQ2EvFDz8+IKxfF1swPSWOlJw6ve0vVNbtwYqV/0WO8oyG8oLlTfqtbdONBkJm1eqJVHWy9ura/nFWaLfumO8eQK57wumy7hW7XKz47ebMU+U2jgJnV3AuRQGluRIQRWL9gRqLvq1UFEaUgERKpo/ViOm8iEqMRN8z2JpBojCF+116enO8OhxJWlesQmhRUH/RMK5wQKEZ7+ysD3ELJU7NIfHzfOVPz5YVj8vZLoYfGDcQKBgQD6M5zSbb9aY7lrg2ReSZPNNw8guevcwlnxojGboG8nnFRcw4sAU5YRvo+h2jPL/uzHz26UQF2tNPBp45XykLZUGEAZ9YXXnEW0Lrxd2mrr1Hjop7pUmHamJIQaRe/EyhYYfuWb0syQXJN7PfaGb95pMSvjOTvK8Qyn7OxFUG+OWwKBgQCM4c+T8rMd/JBuqgR6c7XZaPgBkYn0q19lL9gPL5NCimS4MkFq2glgYdb2vMdwkJgerHvw7hPo/wngmNa/ubFNnL4JTsrp/GQYyLXXa5iMz4lWT/MCdeU8Be9asNV8feEi5RWYWr8XEwLjbq5dpudhbZtL8MhLn8rPGlOfHe1GeQKBgQCVYStIF24fsVqK7i+Ge7da1nyZtWc0rnS053lmySqUI6namITs9PqsLXHj2DsEmHcV9Kq4qJVFTE4dalukLvIs0y2yUfxO9mZHZX/hKP6dPoXRohKFX2G3YCXe6dJ1U5JNnbXIitrHdf43no8JRNEtTMY/K3SffbtopvOJjrSL8QKBgEbJx+WNE5dDqscQQsPMlFkztzoCiREZcwuC6MtomlPa+hTbm6c2+3MkdkDwRj43SVhQTs6WsgZm7+2cnnsjsQVQduRyZN8BZMJXR5eAhtxqA5YNAgwAdTidutEU/ZBaJ9/CwAEXx+CuOstQd+iyzpxT2K5lxB7LobpCfjX7cZfxAoGAQm5EM8DIg5edDr6voc5zPpVlNGpPCON+RdcpOZIlAd7Cn88U0tsYj3ARtMn0OztR4XESmjBRJuGb7IZ2TG6cNrU0AGElGvId1VwLK/yLyC1K3Tvmxmwx8PwxUiWpI0CdoAOvS1OKOUyrvW2vrK2VezyW3AjS5VduVlPNaIm7H6A=
+  server-url: https://openapi.alipay.com/gateway.do
+
 spring:
+  application:
+    name: quartzdemo
+
+  profiles:
+    active: dev
+
+  main:
+    allow-bean-definition-overriding: true
+  
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/user?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
-    username: root
-    password: root123456
+    url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:3306}/${DB_NAME:user}?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&characterEncoding=utf8&useUnicode=true
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root123456}
     type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      filters: stat,wall,slf4j
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        reset-enable: false
+        login-username: admin
+        login-password: ${DRUID_PASSWORD:admin123456}
 
-#当mybatis的xml文件和mapper接口不在相同包下时，需要用mapperLocations属性指定xml文件的路径
+  jackson:
+    time-zone: Asia/Shanghai
+    date-format: yyyy-MM-dd HH:mm:ss
+    serialization:
+      write-dates-as-timestamps: false
+
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
-  type-aliases-package: amp.demo.mapper.*
-#打印sql
+  type-aliases-package: amp.demo.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+
 logging:
   level:
-    amp.demo.mapper.ScheduleJobMapper : debug
+    root: INFO
+    amp.demo: DEBUG
+    amp.demo.mapper: DEBUG
+    org.springframework.web: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/quartzdemo.log
+    max-size: 10MB
+    max-history: 30
+    total-size-cap: 1GB
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  show-actuator: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+  health:
+    db:
+      enabled: true
+    diskspace:
+      enabled: true
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/user?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&characterEncoding=utf8&useUnicode=true
+    username: root
+    password: root123456
+  jpa:
+    show-sql: true
+logging:
+  level:
+    root: INFO
+    amp.demo: DEBUG
+    amp.demo.mapper: DEBUG
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:mysql://prod-db-server:3306/quartz_prod?useSSL=true&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&characterEncoding=utf8&useUnicode=true
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    show-sql: false
+logging:
+  level:
+    root: WARN
+    amp.demo: INFO
+    amp.demo.mapper: WARN
 
 
 

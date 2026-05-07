@@ -1,28 +1,24 @@
 package amp.demo.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-/**
- * @author han_lic
- * @date 2021/5/8 8:38
- */
 @Data
+@Schema(description = "更新产品序列号请求DTO")
 public class UpdateProductSerialReqDTO {
 
-    @ApiModelProperty(value = "项目代码")
-    private  String projectCode;
+    @Schema(description = "项目代码")
+    private String projectCode;
 
-    @ApiModelProperty(value = "手机IMEI号")
-    private  String productSerialNo;
+    @Schema(description = "手机IMEI号")
+    private String productSerialNo;
 
-    @ApiModelProperty(value = "新手机IMEI号")
-    private  String newProductSerialNo;
+    @Schema(description = "新手机IMEI号")
+    private String newProductSerialNo;
 
-    @ApiModelProperty(value = "换机时间")
-    private  String changeTime;
+    @Schema(description = "换机时间")
+    private String changeTime;
 
-    @ApiModelProperty(value = "业务扩展信息")
-    private  String extraInfo;
-
+    @Schema(description = "业务扩展信息")
+    private String extraInfo;
 }

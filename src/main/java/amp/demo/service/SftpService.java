@@ -1,6 +1,6 @@
 package amp.demo.service;
 
-import amp.demo.BO.SftpConfigBO;
+import amp.demo.bo.SftpConfigBO;
 
 import java.io.File;
 

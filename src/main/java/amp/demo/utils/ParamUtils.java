@@ -1,9 +1,7 @@
 package amp.demo.utils;
 
-import amp.demo.ExceptionHandler.MsgEnum;
+import amp.demo.exceptionHandler.MsgEnum;
 import amp.demo.exception.BusinessException;
-import amp.demo.utils.AlertCapable;
-import amp.demo.utils.JudgeUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

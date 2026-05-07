@@ -1,7 +1,7 @@
 package amp.demo.utils;
 
 import amp.demo.test.CommonUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author han_lic

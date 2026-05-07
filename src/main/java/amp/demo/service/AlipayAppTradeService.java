@@ -5,12 +5,11 @@ import com.alipay.api.AlipayApiException;
 import java.util.Map;
 
 public interface AlipayAppTradeService {
+    String appPay() throws AlipayApiException;
 
-    String AlipayAppPay() throws AlipayApiException;
+    String appRefund() throws AlipayApiException;
 
-    String AlipayAppRefund() throws AlipayApiException;
-
-    String AlipayAppClose() throws AlipayApiException;
+    String appClose() throws AlipayApiException;
 
     String refundQuery() throws AlipayApiException;
 
@@ -19,4 +18,7 @@ public interface AlipayAppTradeService {
     boolean processRefundNotify(Map<String, String> params);
 
     void processReturnNotify(Map<String, String> params);
+
+    void processAsyncNotify(Map<String, String> params);
 }
+

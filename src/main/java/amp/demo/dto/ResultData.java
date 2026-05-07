@@ -1,38 +1,76 @@
 package amp.demo.dto;
 
 import amp.demo.entity.UserTest;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
-/**
- * @author han_lic
- * @date 2021/5/7 20:22
- */
 @Data
-public class ResultData {
+public class ResultData<T> implements Serializable {
 
-    @ApiModelProperty(value = "保单号")
+    private static final long serialVersionUID = 1L;
+
+    private Integer code;
+    private String message;
+    private T data;
+    private Long timestamp;
+
     private  String policyNo;
-
-    @ApiModelProperty(value = "保单状态")
     private  String policyStatus;
-
-    @ApiModelProperty(value = "终止原因")
     private  String voidReason;
-
-    @ApiModelProperty(value = "起保时间")
     private  String insuranceStartDate;
-
-    @ApiModelProperty(value = "服务终止时间 ")
     private  String insuranceEndDate;
-
-    @ApiModelProperty(value = "退保时间")
     private  String surrenderDate;
-
-    @ApiModelProperty(value = "订单号")
     private  String channelOrderNo;
-
     List<UserTest> userTestList;
+
+    public ResultData() {
+        this.timestamp = System.currentTimeMillis();
+    }
+
+    public ResultData(Integer code, String message) {
+        this.code = code;
+        this.message = message;
+        this.timestamp = System.currentTimeMillis();
+    }
+
+    public ResultData(Integer code, String message, T data) {
+        this.code = code;
+        this.message = message;
+        this.data = data;
+        this.timestamp = System.currentTimeMillis();
+    }
+
+    public static <T> ResultData<T> success() {
+        return new ResultData<>(200, "操作成功");
+    }
+
+    public static <T> ResultData<T> success(T data) {
+        return new ResultData<>(200, "操作成功", data);
+    }
+
+    public static <T> ResultData<T> success(String message, T data) {
+        return new ResultData<>(200, message, data);
+    }
+
+    public static <T> ResultData<T> error(Integer code, String message) {
+        return new ResultData<>(code, message);
+    }
+
+    public static <T> ResultData<T> error(String code, String message) {
+        try {
+            return new ResultData<>(Integer.parseInt(code), message);
+        } catch (NumberFormatException e) {
+            return new ResultData<>(500, message);
+        }
+    }
+
+    public static <T> ResultData<T> error(String message) {
+        return new ResultData<>(500, message);
+    }
+
+    public static <T> ResultData<T> error() {
+        return new ResultData<>(500, "系统内部错误");
+    }
 }

@@ -1,4 +1,4 @@
-package amp.demo.ExceptionHandler;
+package amp.demo.exceptionHandler;
 
 
 import org.springframework.validation.BindingResult;

@@ -69,6 +69,10 @@ public class BusinessException extends RuntimeException implements AlertCapable 
         return this.msgCd;
     }
 
+    public String getCode() {
+        return this.msgCd;
+    }
+
     public void setMsgCd(String msgCd) {
         this.msgCd = msgCd;
     }

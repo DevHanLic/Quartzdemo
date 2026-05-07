@@ -1,6 +1,6 @@
 package amp.demo.service.impl;
 
-import amp.demo.BO.SftpConfigBO;
+import amp.demo.bo.SftpConfigBO;
 import amp.demo.config.SftpConstants;
 import amp.demo.service.SftpService;
 import amp.demo.utils.JudgeUtils;

@@ -1,109 +1,157 @@
 package amp.demo.service.impl;
 
 import amp.demo.entity.ScheduleJob;
+import amp.demo.exception.BusinessException;
 import amp.demo.mapper.ScheduleJobMapper;
 import amp.demo.service.QuartzService;
 import amp.demo.service.ScheduleJobService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.quartz.SchedulerException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-
 @Service
-@Transactional
-public class ScheduleJobServiceImpl  implements ScheduleJobService {
-    private static final String resume="RESUME";
-    private static final String pause="PAUSE";
-    private static final String delete="DELETE";
+public class ScheduleJobServiceImpl implements ScheduleJobService {
+    private static final Logger logger = LoggerFactory.getLogger(ScheduleJobServiceImpl.class);
+
     @Autowired
     private QuartzService quartzService;
+
     @Autowired
     private ScheduleJobMapper scheduleJobMapper;
+
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void add(ScheduleJob job) {
-        //此处省去数据验证
+        validateJob(job);
         scheduleJobMapper.save(job);
+        logger.info("定时任务 {} 已添加到数据库", job.getJobName());
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void start(Integer id) {
-        //此处省去数据验证
-        ScheduleJob job = scheduleJobMapper.getById(id);
+        if (id == null) {
+            throw new BusinessException("任务ID不能为空");
+        }
+
+        ScheduleJob job = getJobById(id);
         job.setJobStatus(1);
         scheduleJobMapper.updateById(job);
-        //启动job
-        try {
-            quartzService.addJob(job);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        quartzService.addJob(job);
+        logger.info("定时任务 {} 已启动", job.getJobName());
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void update(ScheduleJob job) {
+        validateJob(job);
         scheduleJobMapper.updateById(job);
-        //修改job
-        try{
-            quartzService.update(job);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        quartzService.update(job);
+        logger.info("定时任务 {} 已更新", job.getJobName());
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void resume(Integer id) {
-        //此处省去数据验证
-        ScheduleJob job = scheduleJobMapper.getById(id);
-        job.setJobStatus(1);
+        if (id == null) {
+            throw new BusinessException("任务ID不能为空");
+        }
+
+        ScheduleJob job = getJobById(id);
         scheduleJobMapper.updateById(job);
-        //恢复job
+
         try {
-            quartzService.operateJob(resume, job);
+            quartzService.operateJob("RESUME", job);
         } catch (SchedulerException e) {
-            e.printStackTrace();
+            logger.error("恢复定时任务失败: {}", job.getJobName(), e);
+            throw new BusinessException("恢复定时任务失败: " + e.getMessage());
         }
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void pause(Integer id) {
-        //此处省去数据验证
-        ScheduleJob job = scheduleJobMapper.getById(id);
-        job.setJobStatus(1);
+        if (id == null) {
+            throw new BusinessException("任务ID不能为空");
+        }
+
+        ScheduleJob job = getJobById(id);
         scheduleJobMapper.updateById(job);
-        //停止job
+
         try {
-            quartzService.operateJob(pause, job);
+            quartzService.operateJob("PAUSE", job);
         } catch (SchedulerException e) {
-            e.printStackTrace();
+            logger.error("暂停定时任务失败: {}", job.getJobName(), e);
+            throw new BusinessException("暂停定时任务失败: " + e.getMessage());
         }
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void delete(Integer id) {
-        //此处省去数据验证
-        ScheduleJob job = scheduleJobMapper.getById(id);
+        if (id == null) {
+            throw new BusinessException("任务ID不能为空");
+        }
+
+        ScheduleJob job = getJobById(id);
         scheduleJobMapper.removeById(id);
-        //删除job
+
         try {
-            quartzService.operateJob(delete, job);
+            quartzService.operateJob("DELETE", job);
         } catch (SchedulerException e) {
-            e.printStackTrace();
+            logger.error("删除定时任务失败: {}", job.getJobName(), e);
+            throw new BusinessException("删除定时任务失败: " + e.getMessage());
         }
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateJobStatus(Integer id, Integer status) {
+        if (id == null) {
+            throw new BusinessException("任务ID不能为空");
+        }
 
+        ScheduleJob job = getJobById(id);
+        job.setJobStatus(status != null ? status : 0);
+        scheduleJobMapper.updateById(job);
+        logger.debug("定时任务 {} 状态已更新为: {}", job.getJobName(), status);
+    }
 
     @Override
     public PageInfo<ScheduleJob> getJobAndTriggerDetails(int pageNum, int pageSize) {
-        //使用分页助手进行分页
         PageHelper.startPage(pageNum, pageSize);
         List<ScheduleJob> list = scheduleJobMapper.selectAll();
-        PageInfo<ScheduleJob> page = new PageInfo<ScheduleJob>(list);
-        return page;
+        return new PageInfo<>(list);
+    }
+
+    private ScheduleJob getJobById(Integer id) {
+        ScheduleJob job = scheduleJobMapper.getById(id);
+        if (job == null) {
+            throw new BusinessException("任务不存在: ID=" + id);
+        }
+        return job;
+    }
+
+    private void validateJob(ScheduleJob job) {
+        if (job == null) {
+            throw new BusinessException("任务信息不能为空");
+        }
+        if (job.getJobName() == null || job.getJobName().trim().isEmpty()) {
+            throw new BusinessException("任务名称不能为空");
+        }
+        if (job.getCronExpression() == null || job.getCronExpression().trim().isEmpty()) {
+            throw new BusinessException("Cron表达式不能为空");
+        }
+        if (job.getMethodName() == null || job.getMethodName().trim().isEmpty()) {
+            throw new BusinessException("任务方法名不能为空");
+        }
     }
 }
